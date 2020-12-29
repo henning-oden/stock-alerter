@@ -14,39 +14,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     private SystemUserRepository users;
 
+    private final List<SystemUser> usersInMemory = new ArrayList<>();
+
     private PasswordEncoder passwordEncoder;
     public CustomUserDetailsService(SystemUserRepository users, PasswordEncoder passwordEncoder) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
+        usersInMemory.add(new SystemUser("Test", passwordEncoder.encode("password"), new ArrayList<GrantedAuthority>(Collections.singleton(new SimpleGrantedAuthority("USER")))));
     }
 
-    @Bean
     public UserDetailsService userDetailsService() {
-
-        GrantedAuthority testAuth = new SimpleGrantedAuthority("ROLE_USER");
-
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-
-        authorities.add(testAuth);
-
-        SystemUser testSystemUser = new SystemUser("Test", passwordEncoder.encode("password"), authorities);
-
-        InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
-
-        userDetailsManager.createUser(testSystemUser);
-
-        return userDetailsManager;
+        return new InMemoryUserDetailsManager();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.users.findByUsername(username)
+        return usersInMemory.stream().filter(u -> u.getUsername().equals(username)).findFirst()
                 .orElseThrow(() -> new
                         UsernameNotFoundException("Username: " + username + " not found"));
     }
