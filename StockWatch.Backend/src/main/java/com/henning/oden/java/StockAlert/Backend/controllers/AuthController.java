@@ -3,6 +3,7 @@ package com.henning.oden.java.StockAlert.Backend.controllers;
 import com.henning.oden.java.StockAlert.Backend.entities.AuthenticationRequest;
 import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
+import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,15 +31,14 @@ public class AuthController {
     JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    SystemUserRepository users;
+    CustomUserDetailsService users;
 
     @PostMapping("/signin")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider.createToken(username, this.users.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found"))
+            String token = jwtTokenProvider.createToken(username, this.users.loadUserByUsername(username)
                     .getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
 
             Map<Object, Object> model = new HashMap<>();
