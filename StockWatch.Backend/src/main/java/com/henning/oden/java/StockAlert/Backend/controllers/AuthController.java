@@ -2,7 +2,6 @@ package com.henning.oden.java.StockAlert.Backend.controllers;
 
 import com.henning.oden.java.StockAlert.Backend.entities.AuthenticationRequest;
 import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
-import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

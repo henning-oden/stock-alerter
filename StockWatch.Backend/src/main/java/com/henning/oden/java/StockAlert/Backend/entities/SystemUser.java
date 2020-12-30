@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 @Table("users")
 public class SystemUser extends org.springframework.security.core.userdetails.User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
     @NotEmpty
