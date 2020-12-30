@@ -4,6 +4,7 @@ import com.henning.oden.java.StockAlert.Backend.jwt.JwtConfigurer;
 import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,9 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers("/users/signin").permitAll()
-                .antMatchers("/users/signup").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/users/signin").anonymous()
+                .antMatchers(HttpMethod.POST, "/users/signup").anonymous()
+                .anyRequest().permitAll()
                 .and().apply(new JwtConfigurer(jwtTokenProvider));
     }
 }

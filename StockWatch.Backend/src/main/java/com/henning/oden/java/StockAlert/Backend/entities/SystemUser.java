@@ -1,6 +1,5 @@
 package com.henning.oden.java.StockAlert.Backend.entities;
 
-import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -13,7 +12,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Entity
-@Table("users")
+@Table(name = "users")
 public class SystemUser extends org.springframework.security.core.userdetails.User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
