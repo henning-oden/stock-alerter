@@ -5,6 +5,8 @@ import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsServic
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,9 +18,12 @@ class ApplicationTests {
 
 	private Object SystemUserRepository;
 
+	@Autowired
+	BeanFactory factory;
+
 	@Test
 	void userDetailsFindsDefaultUser() {
-		SystemUserRepository repo = Mockito.mock(SystemUserRepository.class);
+		SystemUserRepository repo = (SystemUserRepository) factory.getBean("systemUserRepository");
 
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

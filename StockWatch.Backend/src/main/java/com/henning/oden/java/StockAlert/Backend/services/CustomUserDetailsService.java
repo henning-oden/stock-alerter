@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetailsService(SystemUserRepository users, PasswordEncoder passwordEncoder) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
-        this.users.save(new SystemUser("Test", passwordEncoder.encode("password"), new ArrayList<GrantedAuthority>(Collections.singleton(new SimpleGrantedAuthority("USER")))));
     }
 
     public UserDetailsService userDetailsService() {

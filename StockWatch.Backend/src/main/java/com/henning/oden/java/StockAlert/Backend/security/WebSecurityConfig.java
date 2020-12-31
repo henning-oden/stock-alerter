@@ -32,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users/signin").anonymous()
-                .antMatchers(HttpMethod.POST, "/users/signup").anonymous()
+                .antMatchers(HttpMethod.POST, "/users/signin").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .anyRequest().permitAll()
                 .and().apply(new JwtConfigurer(jwtTokenProvider));
     }

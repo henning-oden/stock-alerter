@@ -27,8 +27,33 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+    public SystemUser(){
+        super("temp", "temp", new ArrayList<>() {
+        });
+    }
+
     public SystemUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
