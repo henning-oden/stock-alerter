@@ -57,18 +57,14 @@ class ApplicationTests {
 	}
 
 	@Test
-	void stocksCanBeDeleted() {
+	void stocksCanBeDeleted() throws NotFoundException {
 		StockService stockService = (StockService) factory.getBean("stockService");
 
+		Stock stock = stockService.findStockByCode("TEST");
+		// Trying to delete the stock should succeed with no exception
+		stockService.deleteStock(stock);
 
-
-		try {
-			Stock stock = stockService.findStockByCode("TEST");
-			stockService.deleteStock(stock);
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
-
+		// Trying to find the stock again after deleting it should throw exception
 		Exception exception = assertThrows(NotFoundException.class, () -> stockService.findStockByCode("TEST"));
 		assertEquals("Stock with code TEST not found", exception.getMessage());
 
