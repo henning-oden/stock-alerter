@@ -60,4 +60,39 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="3" author="henning">
+        <createTable tableName="stock_watches">
+            <column autoIncrement="true" type="int" name="id">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="stock_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="max_price" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="min_price" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="times_exceeded" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="alert_threshold" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="stock_watches" baseColumnNames="user_id"
+                                 constraintName="fk_user_stock_watch"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+        <addForeignKeyConstraint baseTableName="stock_watches" baseColumnNames="stock_id"
+                                 constraintName="fk_stock_stock_watch"
+                                 referencedTableName="stocks"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
 </databaseChangeLog>

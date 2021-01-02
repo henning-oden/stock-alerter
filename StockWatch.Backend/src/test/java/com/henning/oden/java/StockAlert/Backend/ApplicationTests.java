@@ -63,6 +63,51 @@ class ApplicationTests {
 
 	}
 
+	// Integration tests for StockWatch class.
+	@Test
+	@Order(3)
+	void stockWatchCanBeCreated() throws NotFoundException {
+		StockRepository stockRepository = (StockRepository) factory.getBean("stockRepository");
+
+		SystemUserRepository userRepository = (SystemUserRepository) factory.getBean("systemUserRepository");
+
+		StockWatchRepository stockWatchRepository = (StockWatchRepository) factory.getBean("stockWatchRepository");
+
+		detailsService = new CustomUserDetailsService(userRepository, new BCryptPasswordEncoder());
+
+		SystemUser user = (SystemUser) detailsService.loadUserByUsername("Test");
+
+		Stock stock = stockRepository.findByCode("TEST").get();
+
+		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), 100, 110, 5, 5);
+		StockWatch savedStockWatch = stockWatchRepository.save(stockWatch);
+		stockWatchId = savedStockWatch.getId();
+
+		boolean stockWatchExists = stockWatchRepository.findById(stockWatchId).isPresent();
+
+		assertThat(stockWatchExists).isTrue();
+	}
+
+	@Test
+	@Order(3)
+	void stockWatchCanBeDeleted() {
+		StockRepository stockRepository = (StockRepository) factory.getBean("stockRepository");
+		StockWatchRepository watchRepository = (StockWatchRepository) factory.getBean("stockWatchRepository");
+
+		Stock stock = stockRepository.findByCode("TEST").get();
+
+		StockWatch watch = (StockWatch) watchRepository.findByStockId(stock.getId()).stream().findFirst().get()
+													   .toArray()[0];
+
+		stockWatchId = watch.getId();
+
+		assertThat(watchRepository.findById(stockWatchId).isPresent()).isTrue();
+
+		watchRepository.delete(watch);
+
+		assertThat(watchRepository.findById(stockWatchId).isPresent()).isFalse();
+	}
+
 	@Test
 	@Order(5)
 	void stocksCanBeDeleted() throws NotFoundException {
