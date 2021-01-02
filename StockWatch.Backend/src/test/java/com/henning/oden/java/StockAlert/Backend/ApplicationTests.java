@@ -1,45 +1,52 @@
 package com.henning.oden.java.StockAlert.Backend;
 
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
+import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
+import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
+import com.henning.oden.java.StockAlert.Backend.repos.StockRepository;
+import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
 import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import com.henning.oden.java.StockAlert.Backend.services.StockService;
 import javassist.NotFoundException;
-import org.aspectj.lang.annotation.After;
-import org.assertj.core.api.Assert;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.event.annotation.AfterTestClass;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ApplicationTests {
-
-	private Object SystemUserRepository;
+	private CustomUserDetailsService detailsService;
+	private long stockId;
+	private long stockWatchId;
 
 	@Autowired
 	BeanFactory factory;
 
 	@Test
+	@Order(1)
 	void userDetailsFindsDefaultUser() {
 		SystemUserRepository repo = (SystemUserRepository) factory.getBean("systemUserRepository");
 
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-		CustomUserDetailsService detailsService = new CustomUserDetailsService(repo, passwordEncoder);
+		detailsService = new CustomUserDetailsService(repo, passwordEncoder);
 
 		assertThat(detailsService.loadUserByUsername("Test")).isNotNull();
 	}
 
 	@Test
+	@Order(2)
 	void stocksCanBeCreated() {
 		StockService stockService = (StockService) factory.getBean("stockService");
 
@@ -57,6 +64,7 @@ class ApplicationTests {
 	}
 
 	@Test
+	@Order(5)
 	void stocksCanBeDeleted() throws NotFoundException {
 		StockService stockService = (StockService) factory.getBean("stockService");
 

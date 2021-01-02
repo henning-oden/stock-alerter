@@ -21,8 +21,9 @@ public class StockService {
         return stocks.findByCommonName(commonName).orElseThrow(() -> new NotFoundException("Stock with common name " + commonName + " not found"));
     }
 
-    public void saveStock(Stock stock) {
-        stocks.save(stock);
+    public Stock saveStock(Stock stock) {
+        Stock savedStock = stocks.saveAndFlush(stock);
+        return savedStock;
     }
 
     public void deleteStock(Stock stock) {

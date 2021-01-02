@@ -38,6 +38,14 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
         this.password = password;
     }
 
+    public long getId() {
+        return id.longValue();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String getUsername() {
         return username;
@@ -59,6 +67,10 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     @Override
