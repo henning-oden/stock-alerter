@@ -1,8 +1,6 @@
 package com.henning.oden.java.StockAlert.Backend.repos;
 
-import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
-import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;

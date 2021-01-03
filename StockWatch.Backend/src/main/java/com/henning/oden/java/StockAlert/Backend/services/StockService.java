@@ -7,26 +7,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StockService {
-    private StockRepository stocks;
+    private StockRepository stockRepository;
 
     public StockService(StockRepository stockRepository) {
-        stocks = stockRepository;
+        this.stockRepository = stockRepository;
     }
 
     public Stock findStockByCode(String code) throws NotFoundException {
-        return stocks.findByCode(code).orElseThrow(() -> new NotFoundException("Stock with code " + code + " not found"));
+        return stockRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Stock with code " + code + " not found"));
     }
 
     public Stock findStockByCommonName(String commonName) throws NotFoundException {
-        return stocks.findByCommonName(commonName).orElseThrow(() -> new NotFoundException("Stock with common name " + commonName + " not found"));
+        return stockRepository.findByCommonName(commonName).orElseThrow(() -> new NotFoundException("Stock with common name " + commonName + " not found"));
     }
 
     public Stock saveStock(Stock stock) {
-        Stock savedStock = stocks.saveAndFlush(stock);
+        Stock savedStock = stockRepository.saveAndFlush(stock);
         return savedStock;
     }
 
     public void deleteStock(Stock stock) {
-        stocks.delete(stock);
+        stockRepository.delete(stock);
     }
 }

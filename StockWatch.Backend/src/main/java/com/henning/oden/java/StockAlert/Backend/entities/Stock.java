@@ -1,53 +1,33 @@
 package com.henning.oden.java.StockAlert.Backend.entities;
 
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "stocks")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Long id;
 
     @Column
     @NotEmpty
+    @Getter @Setter
     private String code;
 
     @Column
     @NotEmpty
+    @Getter @Setter
     private String commonName;
-
-    public Stock() {
-
-    }
 
     public Stock(String code, String commonName) {
         this.code = code;
-        this.commonName = commonName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCommonName() {
-        return commonName;
-    }
-
-    public void setCommonName(String commonName) {
         this.commonName = commonName;
     }
 }

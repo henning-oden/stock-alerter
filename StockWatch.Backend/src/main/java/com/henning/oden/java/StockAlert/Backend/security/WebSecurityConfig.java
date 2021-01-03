@@ -1,7 +1,5 @@
 package com.henning.oden.java.StockAlert.Backend.security;
 
-import com.henning.oden.java.StockAlert.Backend.jwt.JwtConfigurer;
-import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

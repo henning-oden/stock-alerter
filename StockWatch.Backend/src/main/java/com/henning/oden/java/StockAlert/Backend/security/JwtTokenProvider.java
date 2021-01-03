@@ -1,4 +1,4 @@
-package com.henning.oden.java.StockAlert.Backend.jwt;
+package com.henning.oden.java.StockAlert.Backend.security;
 
 // retrieved from Hantsy's guide on protecting REST APIs with Spring Security and jwt (zero-equals-false) on medium.com
 

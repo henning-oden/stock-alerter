@@ -1,10 +1,8 @@
 package com.henning.oden.java.StockAlert.Backend.controllers;
 
 import com.henning.oden.java.StockAlert.Backend.entities.AuthenticationRequest;
-import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
+import com.henning.oden.java.StockAlert.Backend.security.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
-import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,21 +20,24 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class AuthController {
 
-    @Autowired
     AuthenticationManager authenticationManager;
 
-    @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    CustomUserDetailsService users;
+    CustomUserDetailsService userDetailsService;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, CustomUserDetailsService userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userDetailsService = userDetailsService;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<Map<Object, Object>> signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            String token = jwtTokenProvider.createToken(username, this.users.loadUserByUsername(username)
+            String token = jwtTokenProvider.createToken(username, this.userDetailsService.loadUserByUsername(username)
                     .getAuthorities().stream().map(Object::toString).collect(Collectors.toList()));
 
             Map<Object, Object> model = new HashMap<>();

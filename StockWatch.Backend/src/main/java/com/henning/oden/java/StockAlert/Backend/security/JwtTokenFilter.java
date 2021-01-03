@@ -1,4 +1,4 @@
-package com.henning.oden.java.StockAlert.Backend.jwt;
+package com.henning.oden.java.StockAlert.Backend.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

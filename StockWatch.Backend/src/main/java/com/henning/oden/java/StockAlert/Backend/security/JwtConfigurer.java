@@ -1,4 +1,4 @@
-package com.henning.oden.java.StockAlert.Backend.jwt;
+package com.henning.oden.java.StockAlert.Backend.security;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
