@@ -3,17 +3,17 @@ package com.henning.oden.java.StockAlert.Backend.controllers;
 import com.henning.oden.java.StockAlert.Backend.entities.AuthenticationRequest;
 import com.henning.oden.java.StockAlert.Backend.jwt.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,5 +46,15 @@ public class AuthController {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid credentials supplied");
         }
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<Map<Object, Object>> info(HttpServletRequest req) {
+        String token = jwtTokenProvider.resolveToken(req);
+        Authentication claims = jwtTokenProvider.getAuthentication(token);
+        String username = claims.getName();
+        Map<Object, Object> model = new HashMap<>();
+        model.put("username", username);
+        return ResponseEntity.ok(model);
     }
 }
