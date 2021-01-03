@@ -9,6 +9,10 @@ import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import com.henning.oden.java.StockAlert.Backend.services.StockService;
 import javassist.NotFoundException;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
+import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
+import net.jacobpeterson.domain.alpaca.marketdata.Bar;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -121,6 +130,32 @@ class ApplicationTests {
 		Exception exception = assertThrows(NotFoundException.class, () -> stockService.findStockByCode("TEST"));
 		assertEquals("Stock with code TEST not found", exception.getMessage());
 
+	}
+
+	@Test
+	@Order(6)
+	void alpacaConfigurationIsCorrect() {
+		AlpacaAPI alpacaAPI = new AlpacaAPI();
+		assertThat(alpacaAPI).isNotNull();
+	}
+
+	@Test
+	@Order(7)
+	void alpacaGetsBar() throws NotFoundException {
+		StockService stockService = (StockService) factory.getBean("stockService");
+		AlpacaAPI alpacaAPI = new AlpacaAPI();
+		Stock stock = stockService.findStockByCode("AAPL");
+		ZonedDateTime startTime = ZonedDateTime.of(2020,12,31,10,0,0,0, ZoneId.of("America/New_York"));
+		ZonedDateTime endTime = ZonedDateTime.of(2020,12,31,10,10,0,0, ZoneId.of("America/New_York"));
+		Bar bar = null;
+		try {
+			Map<String, ArrayList<Bar>> bars = alpacaAPI.getBars(BarsTimeFrame.ONE_MIN, "AAPL", null, startTime, endTime, null, null);
+			bar =  bars.get("AAPL").get(0);
+			bars.values().forEach((b) -> System.out.println(b.toString()));
+		} catch (AlpacaAPIRequestException e) {
+			e.printStackTrace();
+		}
+		assertThat(bar).isNotNull();
 	}
 
 }
