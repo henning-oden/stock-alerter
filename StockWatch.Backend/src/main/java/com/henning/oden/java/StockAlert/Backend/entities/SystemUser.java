@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class SystemUser extends org.springframework.security.core.userdetails.User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    long id;
 
     @NotEmpty
     private String username;
@@ -39,10 +39,10 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     }
 
     public long getId() {
-        return id.longValue();
+        return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
