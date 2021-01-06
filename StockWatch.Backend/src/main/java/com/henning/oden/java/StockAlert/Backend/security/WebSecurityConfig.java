@@ -1,5 +1,6 @@
 package com.henning.oden.java.StockAlert.Backend.security;
 
+import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,16 +12,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
+    private CustomUserDetailsService userDetailsService;
 
-    public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    public WebSecurityConfig(JwtTokenProvider jwtTokenProvider, CustomUserDetailsService customUserDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        userDetailsService = customUserDetailsService;
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public JwtAuthenticator jwtAuthenticator() throws Exception {
+        return new JwtAuthenticator(userDetailsService, authenticationManagerBean(), jwtTokenProvider);
     }
 
     @Override
@@ -33,6 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users/signin").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .anyRequest().authenticated()
-                .and().apply(new JwtConfigurer(jwtTokenProvider));
+                .and().apply(new JwtConfigurer(jwtAuthenticator()));
     }
 }

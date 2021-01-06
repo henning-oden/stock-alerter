@@ -6,6 +6,7 @@ import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import com.henning.oden.java.StockAlert.Backend.repos.StockRepository;
 import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
 import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
+import com.henning.oden.java.StockAlert.Backend.security.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import com.henning.oden.java.StockAlert.Backend.services.StockService;
 import javassist.NotFoundException;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -41,6 +43,8 @@ class ApplicationTests {
 
 	@Autowired
 	BeanFactory factory;
+	private AuthenticationManager authenticationManager;
+	private JwtTokenProvider jwtTokenProvider;
 
 	@Test
 	@Order(1)
@@ -49,7 +53,7 @@ class ApplicationTests {
 
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-		detailsService = new CustomUserDetailsService(repo, passwordEncoder);
+		detailsService = new CustomUserDetailsService(repo);
 
 		assertThat(detailsService.loadUserByUsername("Test")).isNotNull();
 	}
@@ -82,7 +86,11 @@ class ApplicationTests {
 
 		StockWatchRepository stockWatchRepository = (StockWatchRepository) factory.getBean("stockWatchRepository");
 
-		detailsService = new CustomUserDetailsService(userRepository, new BCryptPasswordEncoder());
+		authenticationManager = (AuthenticationManager) factory.getBean("authenticationManagerBean");
+
+		jwtTokenProvider = (JwtTokenProvider) factory.getBean("jwtTokenProvider");
+
+		detailsService = new CustomUserDetailsService(userRepository);
 
 		SystemUser user = (SystemUser) detailsService.loadUserByUsername("Test");
 
