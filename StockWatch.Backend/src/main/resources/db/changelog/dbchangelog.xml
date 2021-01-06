@@ -47,22 +47,6 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
                                  referencedColumnNames="id"
                                  onUpdate="CASCADE" onDelete="CASCADE" />
     </changeSet>
-    <changeSet id="data1" author="henning">
-        <insert tableName="users" >
-            <column name="id" valueNumeric="1"></column>
-            <column name="username" value="Test"></column>
-            <column name="password" value="$10$A5WJPwuxpYJEuMgKNr8o/uxZIeAZPBU2LkrHYnVoC3lycFddZfrPW"></column>
-        </insert>
-        <insert tableName="roles" >
-            <column name="id" valueNumeric="1"></column>
-            <column name="name" value="USER"></column>
-        </insert>
-        <insert tableName="system_user_roles" >
-            <column name="id" valueNumeric="1"></column>
-            <column name="system_user_id" valueNumeric="1"></column>
-            <column name="roles" valueNumeric="1"></column>
-        </insert>
-    </changeSet>
     <changeSet id="2" author="henning">
         <createTable tableName="stocks">
             <column autoIncrement="true" type="bigint" name="id">
@@ -75,23 +59,6 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
                 <constraints nullable="false" />
             </column>
         </createTable>
-    </changeSet>
-    <changeSet id="data2" author="henning">
-        <insert tableName="stocks" >
-            <column name="id" valueNumeric="1"></column>
-            <column name="code" value="AAPL"></column>
-            <column name="common_name" value="Apple"></column>
-        </insert>
-        <insert tableName="stocks" >
-            <column name="id" valueNumeric="2"></column>
-            <column name="code" value="GOOGL"></column>
-            <column name="common_name" value="Alphabet Inc Class A"></column>
-        </insert>
-        <insert tableName="stocks" >
-            <column name="id" valueNumeric="3"></column>
-            <column name="code" value="MSOFT"></column>
-            <column name="common_name" value="Microsoft"></column>
-        </insert>
     </changeSet>
     <changeSet id="3" author="henning">
         <createTable tableName="stock_watches">
