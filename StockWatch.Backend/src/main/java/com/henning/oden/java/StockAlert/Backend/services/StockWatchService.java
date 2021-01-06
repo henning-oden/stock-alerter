@@ -6,9 +6,7 @@ import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class StockWatchService {
@@ -18,22 +16,22 @@ public class StockWatchService {
         stockWatches = watches;
     }
 
-    public Collection<StockWatch> findStockWatchesByStock(Stock stock) {
+    public List<StockWatch> findStockWatchesByStock(Stock stock) {
         return findStockWatchesByStockId(stock.getId());
     }
 
-    public Collection<StockWatch> findStockWatchesByStockId(long id) {
-        Optional<Collection<StockWatch>> watchesOptional = stockWatches.findByStockId(id);
-        return watchesOptional.orElse(new ArrayList<>());
+    public List<StockWatch> findStockWatchesByStockId(long id) {
+        List<StockWatch> watchesOptional = stockWatches.findByStockId(id);
+        return watchesOptional;
     }
 
-    public Collection<StockWatch> findStockWatchesByUser(SystemUser user) {
+    public List<StockWatch> findStockWatchesByUser(SystemUser user) {
         return findStockWatchesByUserId(user.getId());
     }
 
-    private Collection<StockWatch> findStockWatchesByUserId(long id) {
-        Optional<Collection<StockWatch>> watchesOptional = stockWatches.findByUserId(id);
-        return watchesOptional.orElse(new ArrayList<>());
+    private List<StockWatch> findStockWatchesByUserId(long id) {
+        List<StockWatch> watchesOptional = stockWatches.findByUserId(id);
+        return watchesOptional;
     }
 
     public StockWatch saveStockWatch(StockWatch stockWatch) {

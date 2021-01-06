@@ -29,10 +29,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -67,12 +69,8 @@ class ApplicationTests {
 
 		stockService.saveStock(stock);
 
-		try {
-			assertThat(stockService.findStockByCode("TEST")).isNotNull();
-			assertThat(stockService.findStockByCommonName("test stock")).isNotNull();
-		} catch (NotFoundException e) {
-			throw new AssertionError("Unexpected exception thrown by test.");
-		}
+		assertThat(stockService.findStockByCode("TEST").isPresent()).isTrue();
+		assertThat(stockService.findStockByCommonName("test stock").isPresent()).isTrue();
 
 	}
 
@@ -113,8 +111,7 @@ class ApplicationTests {
 
 		Stock stock = stockRepository.findByCode("TEST").get();
 
-		StockWatch watch = (StockWatch) watchRepository.findByStockId(stock.getId()).stream().findFirst().get()
-													   .toArray()[0];
+		StockWatch watch = (StockWatch) watchRepository.findByStockId(stock.getId()).stream().findFirst().get();
 
 		stockWatchId = watch.getId();
 
@@ -130,14 +127,13 @@ class ApplicationTests {
 	void stocksCanBeDeleted() throws NotFoundException {
 		StockService stockService = (StockService) factory.getBean("stockService");
 
-		Stock stock = stockService.findStockByCode("TEST");
-		// Trying to delete the stock should succeed with no exception
-		stockService.deleteStock(stock);
+		Optional<Stock> stock = stockService.findStockByCode("TEST");
+		// Trying to delete the stock should succeed
+		stockService.deleteStock(stock.get());
 
-		// Trying to find the stock again after deleting it should throw exception
-		Exception exception = assertThrows(NotFoundException.class, () -> stockService.findStockByCode("TEST"));
-		assertEquals("Stock with code TEST not found", exception.getMessage());
-
+		// Trying to find the stock again after deleting it should return an empty optional
+		Optional<Stock> deletedStock = stockService.findStockByCode("TEST");
+		assertThat(deletedStock.isEmpty()).isTrue();
 	}
 
 	@Test
@@ -152,7 +148,6 @@ class ApplicationTests {
 	void alpacaGetsBar() throws NotFoundException {
 		StockService stockService = (StockService) factory.getBean("stockService");
 		AlpacaAPI alpacaAPI = new AlpacaAPI();
-		Stock stock = stockService.findStockByCode("AAPL");
 		ZonedDateTime startTime = ZonedDateTime.of(2020,12,31,10,0,0,0, ZoneId.of("America/New_York"));
 		ZonedDateTime endTime = ZonedDateTime.of(2020,12,31,10,10,0,0, ZoneId.of("America/New_York"));
 		Bar bar = null;

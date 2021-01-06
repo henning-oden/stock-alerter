@@ -5,6 +5,8 @@ import com.henning.oden.java.StockAlert.Backend.repos.StockRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class StockService {
     private final StockRepository stockRepository;
@@ -13,12 +15,12 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public Stock findStockByCode(String code) throws NotFoundException {
-        return stockRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Stock with code " + code + " not found"));
+    public Optional<Stock> findStockByCode(String code) {
+        return stockRepository.findByCode(code);
     }
 
-    public Stock findStockByCommonName(String commonName) throws NotFoundException {
-        return stockRepository.findByCommonName(commonName).orElseThrow(() -> new NotFoundException("Stock with common name " + commonName + " not found"));
+    public Optional<Stock> findStockByCommonName(String commonName) {
+        return stockRepository.findByCommonName(commonName);
     }
 
     public Stock saveStock(Stock stock) {
