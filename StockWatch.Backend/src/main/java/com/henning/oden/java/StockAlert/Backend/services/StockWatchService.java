@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class StockWatchService {
-    private StockWatchRepository stockWatches;
+    private final StockWatchRepository stockWatches;
 
     public StockWatchService (StockWatchRepository watches) {
         stockWatches = watches;

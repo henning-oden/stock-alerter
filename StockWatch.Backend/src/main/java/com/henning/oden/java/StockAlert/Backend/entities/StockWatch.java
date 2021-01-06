@@ -1,10 +1,17 @@
 package com.henning.oden.java.StockAlert.Backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "stock_watches")
@@ -42,15 +49,6 @@ public class StockWatch {
     @Getter @Setter
     private int alertThreshold;
 
-    @JsonInclude()
-    @Transient
-    @Getter @Setter
-    private Stock stock;
-
-    @JsonInclude()
-    @Transient
-    @Getter @Setter
-    private SystemUser user;
 
     public StockWatch(long userId, long stockId, double minPrice, double maxPrice, int countExceeded, int alertThreshold) {
         this.userId = userId;
@@ -59,14 +57,5 @@ public class StockWatch {
         this.maxPrice = maxPrice;
         this.timesExceeded = countExceeded < 1 ? 5 : countExceeded;
         this.alertThreshold = alertThreshold < 1 ? 5 : alertThreshold;
-    }
-
-    public StockWatch(double minPrice, double maxPrice, int countExceeded, int alertThreshold, Stock stock, SystemUser user) {
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-        this.timesExceeded = countExceeded;
-        this.alertThreshold = alertThreshold;
-        this.stock = stock;
-        this.user = user;
     }
 }
