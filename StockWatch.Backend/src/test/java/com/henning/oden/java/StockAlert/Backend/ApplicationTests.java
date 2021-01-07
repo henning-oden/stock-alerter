@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,6 +43,18 @@ class ApplicationTests {
 	private CustomUserDetailsService detailsService;
 	private long stockId;
 	private long stockWatchId;
+
+	@Value( "${alpaca.key_id}" )
+	private String keyId;
+
+	@Value( "${alpaca.secret}" )
+	private String secret;
+
+	@Value( "${alpaca.base_api_url}" )
+	private String alpacaBaseUrl;
+
+	@Value( "${alpaca.base_data_url]" )
+	private String alpacaDataUrl;
 
 	@Autowired
 	BeanFactory factory;
@@ -138,16 +151,9 @@ class ApplicationTests {
 
 	@Test
 	@Order(6)
-	void alpacaConfigurationIsCorrect() {
-		AlpacaAPI alpacaAPI = new AlpacaAPI();
-		assertThat(alpacaAPI).isNotNull();
-	}
-
-	@Test
-	@Order(7)
 	void alpacaGetsBar() throws NotFoundException {
 		StockService stockService = (StockService) factory.getBean("stockService");
-		AlpacaAPI alpacaAPI = new AlpacaAPI();
+		AlpacaAPI alpacaAPI = new AlpacaAPI(keyId, secret, alpacaBaseUrl);
 		ZonedDateTime startTime = ZonedDateTime.of(2020,12,31,10,0,0,0, ZoneId.of("America/New_York"));
 		ZonedDateTime endTime = ZonedDateTime.of(2020,12,31,10,10,0,0, ZoneId.of("America/New_York"));
 		Bar bar = null;
