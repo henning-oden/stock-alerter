@@ -2,11 +2,13 @@ package com.henning.oden.java.StockAlert.Backend.security;
 
 // retrieved from Hantsy's guide on protecting REST APIs with Spring Security and jwt (zero-equals-false) on medium.com
 
+import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,7 +29,10 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.expire-length:3600000}")
     private final long validityInMilliseconds = 3600000; // 1h
 
-    public JwtTokenProvider() {
+    private CustomUserDetailsService userDetailsService;
+
+    public JwtTokenProvider(CustomUserDetailsService customUserDetailsService) {
+        userDetailsService = customUserDetailsService;
     }
 
     @PostConstruct
@@ -69,6 +74,19 @@ public class JwtTokenProvider {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public Authentication getAuthenticationFromToken(String token) {
+        String username = getUsername(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return getAuthentication(userDetails);
+    }
+
+    public String getCurrentUserUsername(HttpServletRequest req) {
+        String username = getUsernameFromRequest(req);
+        UserDetails authenticatedUser = userDetailsService.loadUserByUsername(username);
+        Authentication claims = getAuthentication(authenticatedUser);
+        return claims.getName();
     }
 
     public boolean validateToken(String token) {

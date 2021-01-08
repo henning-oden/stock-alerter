@@ -26,11 +26,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JwtAuthenticator jwtAuthenticator() throws Exception {
-        return new JwtAuthenticator(userDetailsService, authenticationManagerBean(), jwtTokenProvider);
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -41,6 +36,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users/signin").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/signup").permitAll()
                 .anyRequest().authenticated()
-                .and().apply(new JwtConfigurer(jwtAuthenticator()));
+                .and().apply(new JwtConfigurer(jwtTokenProvider, authenticationManager()));
     }
 }

@@ -1,5 +1,6 @@
-package com.henning.oden.java.StockAlert.Backend.security;
+package com.henning.oden.java.StockAlert.Backend.security.services;
 
+import com.henning.oden.java.StockAlert.Backend.security.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +15,9 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
+@Service
 @AllArgsConstructor
-public class JwtAuthenticator {
+public class JwtAuthenticationService {
     @Getter @Setter
     private CustomUserDetailsService userDetailsService;
     @Getter @Setter
@@ -34,19 +36,5 @@ public class JwtAuthenticator {
         UserDetails authenticatedUser = userDetailsService.loadUserByUsername(username);
         Authentication claims = jwtTokenProvider.getAuthentication(authenticatedUser);
         return claims.getName();
-    }
-
-    public Authentication getAuthenticationFromToken(String token) {
-        String username = jwtTokenProvider.getUsername(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return jwtTokenProvider.getAuthentication(userDetails);
-    }
-
-    public String resolveToken(HttpServletRequest req) {
-        return jwtTokenProvider.resolveToken(req);
-    }
-
-    public boolean validateToken(String token) {
-        return jwtTokenProvider.validateToken(token);
     }
 }
