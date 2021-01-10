@@ -2,6 +2,7 @@ package com.henning.oden.java.StockAlert.Backend.controllers;
 
 import com.henning.oden.java.StockAlert.Backend.dto.AuthenticationRequest;
 import com.henning.oden.java.StockAlert.Backend.dto.AuthenticationResponse;
+import com.henning.oden.java.StockAlert.Backend.dto.UserInfoResponse;
 import com.henning.oden.java.StockAlert.Backend.security.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.security.services.JwtAuthenticationService;
 import lombok.AllArgsConstructor;
@@ -26,21 +27,21 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthenticationResponse> signin(@RequestBody AuthenticationRequest data) {
+    public AuthenticationResponse signin(@RequestBody AuthenticationRequest data) {
         try {
             String username = data.getUsername();
             String password = data.getPassword();
             String token = jwtAuthenticationService.authenticateUser(username, password);
             AuthenticationResponse response = new AuthenticationResponse(username, token);
-            return ResponseEntity.ok(response);
+            return response;
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid credentials supplied");
         }
     }
 
     @GetMapping("/info")
-    public ResponseEntity<Map<String,String>> info(HttpServletRequest req) {
+    public UserInfoResponse info(HttpServletRequest req) {
         String username = jwtTokenProvider.getCurrentUserUsername(req);
-        return ResponseEntity.ok(Map.of("username", username));
+        return new UserInfoResponse(username);
     }
 }
