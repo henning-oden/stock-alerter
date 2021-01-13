@@ -1,8 +1,10 @@
 package com.henning.oden.java.StockAlert.Backend.services;
 // Todo: Write unit tests for this class.
 
+import com.henning.oden.java.StockAlert.Backend.entities.StockPriceData;
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
+import com.henning.oden.java.StockAlert.Backend.repos.StockPriceDataRepository;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StockPriceDataService {
+    private StockPriceDataRepository stockPriceDataRepository;
     private StockService stockService;
     private StockWatchService stockWatchService;
 
@@ -33,7 +37,8 @@ public class StockPriceDataService {
     @Value( "${alpaca.base_api_url}" )
     private String alpacaBaseUrl;
 
-    public StockPriceDataService (StockService stockService, StockWatchService stockWatchService) {
+    public StockPriceDataService (StockPriceDataRepository stockPriceDataRepository, StockService stockService, StockWatchService stockWatchService) {
+        this.stockPriceDataRepository = stockPriceDataRepository;
         this.stockService = stockService;
         this.stockWatchService = stockWatchService;
     }
@@ -64,15 +69,18 @@ public class StockPriceDataService {
             Stock stock = stockOptional.get();
             List<StockWatch> stockWatches = stockWatchService.findStockWatchesByStock(stock);
             if (bars.size() > 0) {
-                updateStockWatches(code, bars, stockWatches);
+                Bar bar = bars.get(0);
+                updateStockWatches(code, bar, stockWatches);
+                saveStockPriceData(stock.getId(), bar);
             };
 
         } else
         throw new IllegalStateException("Could not find own stock in database! Is the database online?");
     }
 
-    private void updateStockWatches(String code, ArrayList<Bar> bars, List<StockWatch> stockWatches) {
-        double stockPrice = bars.get(0).getC();
+    // todo: Implement as separate threads?
+    private void updateStockWatches(String code, Bar bar, List<StockWatch> stockWatches) {
+        double stockPrice = bar.getC();
 //        System.out.println(stockPrice);
         stockWatches.forEach(sw -> {
             sw.setTimesExceeded(stockPrice < sw.getMinPrice() || stockPrice > sw.getMaxPrice() ?
@@ -81,5 +89,17 @@ public class StockPriceDataService {
         });
         // Todo: Use a proper logger here.
         System.out.println("Stock watches for stock with code " + code + " have been checked.");
+    }
+
+    private void saveStockPriceData(long stockId, Bar bar) {
+        Instant barStartTime = Instant.ofEpochSecond(bar.getT());
+        ZonedDateTime zonedBarStartTime = ZonedDateTime.ofInstant(barStartTime, ZoneId.of("America/New_York"));
+        StockPriceData priceData = new StockPriceData(stockId, bar.getC(), zonedBarStartTime);
+        saveStockPriceData(priceData);
+    }
+
+    public StockPriceData saveStockPriceData(StockPriceData stockPriceData) {
+        StockPriceData savedStockPriceData = stockPriceDataRepository.saveAndFlush(stockPriceData);
+        return savedStockPriceData;
     }
 }

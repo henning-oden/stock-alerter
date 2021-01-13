@@ -118,4 +118,24 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
                                  referencedColumnNames="id"
                                  onUpdate="CASCADE" onDelete="CASCADE" />
     </changeSet>
+    <changeSet id="4" author="henning">
+        <createTable tableName="price_data">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="stock_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="price" type="decimal">
+                <constraints nullable="false" />
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="price_data" baseColumnNames="stock_id" constraintName="fk_stock_price_data"
+                                 referencedTableName="stocks"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
 </databaseChangeLog>
