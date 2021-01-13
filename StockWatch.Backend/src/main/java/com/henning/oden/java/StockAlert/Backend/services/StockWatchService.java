@@ -7,6 +7,7 @@ import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockWatchService {
@@ -29,9 +30,13 @@ public class StockWatchService {
         return findStockWatchesByUserId(user.getId());
     }
 
-    private List<StockWatch> findStockWatchesByUserId(long id) {
+    public List<StockWatch> findStockWatchesByUserId(long id) {
         List<StockWatch> watchesOptional = stockWatches.findByUserId(id);
         return watchesOptional;
+    }
+
+    public List<StockWatch> findAll() {
+        return stockWatches.findAll();
     }
 
     public StockWatch saveStockWatch(StockWatch stockWatch) {
@@ -40,5 +45,9 @@ public class StockWatchService {
 
     public void deleteStockWatch(StockWatch stockWatch) {
         stockWatches.delete(stockWatch);
+    }
+
+    public Optional<StockWatch> findById(long id) {
+        return stockWatches.findById(id);
     }
 }

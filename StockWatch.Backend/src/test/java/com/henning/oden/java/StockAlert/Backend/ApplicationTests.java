@@ -107,7 +107,7 @@ class ApplicationTests {
 
 		Stock stock = stockRepository.findByCode("TEST").get();
 
-		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), 100, 110, 5, 5);
+		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), 100, 110, 5);
 		StockWatch savedStockWatch = stockWatchRepository.save(stockWatch);
 		stockWatchId = savedStockWatch.getId();
 

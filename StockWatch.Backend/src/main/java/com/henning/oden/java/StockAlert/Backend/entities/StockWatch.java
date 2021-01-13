@@ -50,12 +50,11 @@ public class StockWatch {
     private int alertThreshold;
 
 
-    public StockWatch(long userId, long stockId, double minPrice, double maxPrice, int countExceeded, int alertThreshold) {
+    public StockWatch(long userId, long stockId, double minPrice, double maxPrice, int alertThreshold) {
         this.userId = userId;
         this.stockId = stockId;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
-        this.timesExceeded = countExceeded < 1 ? 5 : countExceeded;
         this.alertThreshold = alertThreshold < 1 ? 5 : alertThreshold;
     }
 }

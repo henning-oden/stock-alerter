@@ -2,14 +2,16 @@ package com.henning.oden.java.StockAlert.Backend.services;
 
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.repos.StockRepository;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StockService {
     private final StockRepository stockRepository;
+
+    public List<Stock> findAll() { return stockRepository.findAll(); }
 
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
@@ -30,5 +32,16 @@ public class StockService {
 
     public void deleteStock(Stock stock) {
         stockRepository.delete(stock);
+    }
+
+    public List<Stock> findStockByCodeContainingOrCommonNameContainingAllIgnoreCase(String code, String commonName) {
+        return stockRepository.findByCodeContainingOrCommonNameContainingAllIgnoreCase(code, commonName);
+    }
+
+    public List<Stock> findByCodeContainingIgnoreCase(String codePart) {
+        return stockRepository.findByCodeContainingIgnoreCase(codePart);
+    }
+    public List<Stock> findByCommonNameContainingIgnoreCase(String commonNamePart) {
+        return  stockRepository.findByCommonNameContainingIgnoreCase(commonNamePart);
     }
 }
