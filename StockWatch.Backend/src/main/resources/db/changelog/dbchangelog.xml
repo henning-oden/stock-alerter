@@ -79,7 +79,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
         </insert>
         <insert tableName="stocks" >
             <column name="id" valueNumeric="3"></column>
-            <column name="code" value="MSOFT"></column>
+            <column name="code" value="MSFT"></column>
             <column name="common_name" value="Microsoft"></column>
         </insert>
     </changeSet>
