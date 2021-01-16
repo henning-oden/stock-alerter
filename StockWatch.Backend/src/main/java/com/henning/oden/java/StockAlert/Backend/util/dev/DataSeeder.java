@@ -32,7 +32,9 @@ public class DataSeeder {
 
     private void seedTestUser() {
         if (systemUserRepository.findAll().isEmpty()) {
-            systemUserRepository.save(new SystemUser("Test", passwordEncoder.encode("password"), new ArrayList<GrantedAuthority>(Collections.singleton(new SimpleGrantedAuthority("USER")))));
+            systemUserRepository.save(new SystemUser("Test", passwordEncoder.encode("password"),
+                    "test@example.com", true, new ArrayList<GrantedAuthority>(Collections.singleton(
+                            new SimpleGrantedAuthority("USER")))));
         }
     }
 }

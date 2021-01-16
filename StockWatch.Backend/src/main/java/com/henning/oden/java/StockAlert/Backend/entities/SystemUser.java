@@ -3,6 +3,7 @@ package com.henning.oden.java.StockAlert.Backend.entities;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,6 +31,12 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     @NotEmpty
     private String password;
 
+    @NotEmpty
+    private String emailAddress;
+
+    @Column
+    private boolean emailVerified;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
@@ -38,10 +45,12 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
         });
     }
 
-    public SystemUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public SystemUser(String username, String password, String emailAddress, boolean emailVerified, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.username = username;
         this.password = password;
+        this.emailAddress = emailAddress;
+        this.emailVerified = emailVerified;
     }
 
     public long getId() {
@@ -68,6 +77,22 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
     @Override

@@ -9,6 +9,10 @@ import com.henning.oden.java.StockAlert.Backend.repos.SystemUserRepository;
 import com.henning.oden.java.StockAlert.Backend.security.JwtTokenProvider;
 import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsService;
 import com.henning.oden.java.StockAlert.Backend.services.StockService;
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
 import javassist.NotFoundException;
 import net.jacobpeterson.alpaca.AlpacaAPI;
 import net.jacobpeterson.alpaca.enums.BarsTimeFrame;
@@ -26,6 +30,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -55,6 +60,9 @@ class ApplicationTests {
 
 	@Value( "${alpaca.base_data_url]" )
 	private String alpacaDataUrl;
+
+	@Value( "${sendgrid.api_key}" )
+	private String sendGridKey;
 
 	@Autowired
 	BeanFactory factory;
@@ -165,6 +173,22 @@ class ApplicationTests {
 			e.printStackTrace();
 		}
 		assertThat(bar).isNotNull();
+	}
+
+	@Test
+	void sendgridLogin() {
+		SendGrid sendGrid = new SendGrid(sendGridKey);
+		try {
+			Request request = new Request();
+			request.setMethod(Method.GET);
+			request.setEndpoint("api_keys");
+			Response response = sendGrid.api(request);
+			System.out.println(response.getStatusCode());
+			System.out.println(response.getBody());
+			System.out.println(response.getHeaders());
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 }
