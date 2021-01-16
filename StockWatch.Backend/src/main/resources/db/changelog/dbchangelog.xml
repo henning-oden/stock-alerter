@@ -94,10 +94,10 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
             <column name="stock_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="max_price" type="decimal">
+            <column name="max_price" type="decimal(9,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="min_price" type="decimal">
+            <column name="min_price" type="decimal(9,2)">
                 <constraints nullable="false" />
             </column>
             <column name="times_exceeded" type="int">
@@ -126,7 +126,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
             <column name="stock_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="price" type="decimal">
+            <column name="price" type="decimal(9,2)">
                 <constraints nullable="false" />
             </column>
             <column name="time" type="timestamp">
