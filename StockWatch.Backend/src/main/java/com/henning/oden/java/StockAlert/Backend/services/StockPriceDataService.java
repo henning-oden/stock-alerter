@@ -50,7 +50,7 @@ public class StockPriceDataService {
     public void getStockPriceData() {
         AlpacaAPI api = new AlpacaAPI(keyId, secret, alpacaBaseUrl);
         List<String> stockCodes = stockService.findAll().stream().map(s -> s.getCode()).collect(Collectors.toList());
-        ZonedDateTime now = ZonedDateTime.now().minusDays(1).withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"));
         ZonedDateTime start = now.minusMinutes(2); // Ensures the last minute's full bars are returned from the API.
         String[] stockCodeArray = stockCodes.toArray(new String[stockCodes.size()]);
         try {
