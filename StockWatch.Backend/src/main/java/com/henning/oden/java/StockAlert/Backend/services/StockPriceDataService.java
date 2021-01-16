@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,7 @@ public class StockPriceDataService {
     public void getStockPriceData() {
         AlpacaAPI api = new AlpacaAPI(keyId, secret, alpacaBaseUrl);
         List<String> stockCodes = stockService.findAll().stream().map(s -> s.getCode()).collect(Collectors.toList());
-        ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("America/New_York"));
+        ZonedDateTime now = ZonedDateTime.now().minusDays(1).withZoneSameInstant(ZoneId.of("America/New_York"));
         ZonedDateTime start = now.minusMinutes(2); // Ensures the last minute's full bars are returned from the API.
         String[] stockCodeArray = stockCodes.toArray(new String[stockCodes.size()]);
         try {
@@ -80,10 +83,10 @@ public class StockPriceDataService {
 
     // todo: Implement as separate threads?
     private void updateStockWatches(String code, Bar bar, List<StockWatch> stockWatches) {
-        double stockPrice = bar.getC();
+        BigDecimal stockPrice = BigDecimal.valueOf(bar.getC());
 //        System.out.println(stockPrice);
         stockWatches.forEach(sw -> {
-            sw.setTimesExceeded(stockPrice < sw.getMinPrice() || stockPrice > sw.getMaxPrice() ?
+            sw.setTimesExceeded(stockPrice.compareTo(sw.getMinPrice()) == -1 || stockPrice.compareTo(sw.getMaxPrice()) == 1 ?
                     sw.getTimesExceeded() + 1 : sw.getTimesExceeded());
             stockWatchService.saveStockWatch(sw);
         });
@@ -92,9 +95,9 @@ public class StockPriceDataService {
     }
 
     private void saveStockPriceData(long stockId, Bar bar) {
-        Instant barStartTime = Instant.ofEpochSecond(bar.getT());
-        ZonedDateTime zonedBarStartTime = ZonedDateTime.ofInstant(barStartTime, ZoneId.of("America/New_York"));
-        StockPriceData priceData = new StockPriceData(stockId, bar.getC(), zonedBarStartTime);
+        Instant barTime = Instant.ofEpochSecond(bar.getT()).plus(1, ChronoUnit.MINUTES);
+        ZonedDateTime zonedBarStartTime = ZonedDateTime.ofInstant(barTime, ZoneId.of("America/New_York"));
+        StockPriceData priceData = new StockPriceData(stockId, BigDecimal.valueOf(bar.getC()), zonedBarStartTime);
         saveStockPriceData(priceData);
     }
 

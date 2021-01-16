@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "stock_watches")
@@ -35,11 +36,11 @@ public class StockWatch {
 
     @Column
     @Getter @Setter
-    private double minPrice;
+    private BigDecimal minPrice;
 
     @Column
     @Getter @Setter
-    private double maxPrice;
+    private BigDecimal maxPrice;
 
     @Column
     @Getter @Setter
@@ -50,7 +51,7 @@ public class StockWatch {
     private int alertThreshold;
 
 
-    public StockWatch(long userId, long stockId, double minPrice, double maxPrice, int alertThreshold) {
+    public StockWatch(long userId, long stockId, BigDecimal minPrice, BigDecimal maxPrice, int alertThreshold) {
         this.userId = userId;
         this.stockId = stockId;
         this.minPrice = minPrice;

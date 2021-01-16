@@ -31,6 +31,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -115,7 +116,7 @@ class ApplicationTests {
 
 		Stock stock = stockRepository.findByCode("TEST").get();
 
-		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), 100, 110, 5);
+		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), BigDecimal.valueOf(100), BigDecimal.valueOf(110), 5);
 		StockWatch savedStockWatch = stockWatchRepository.save(stockWatch);
 		stockWatchId = savedStockWatch.getId();
 

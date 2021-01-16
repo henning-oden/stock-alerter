@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -26,12 +27,12 @@ public class StockPriceData {
     private long stockId;
     @Column
     @Getter @Setter
-    private double price;
+    private BigDecimal price;
     @Basic
     @Getter @Setter
     private ZonedDateTime time;
 
-    public StockPriceData(long stockId, double price, ZonedDateTime time) {
+    public StockPriceData(long stockId, BigDecimal price, ZonedDateTime time) {
         this.stockId = stockId;
         this.price = price;
         this.time = time;
