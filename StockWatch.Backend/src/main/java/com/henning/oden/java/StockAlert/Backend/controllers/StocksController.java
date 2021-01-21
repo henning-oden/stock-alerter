@@ -45,11 +45,14 @@ public class StocksController {
         String username = jwtTokenProvider.getUsernameFromRequest(httpRequest);
         SystemUser user = (SystemUser) userDetailsService.loadUserByUsername(username);
         long userId = user.getId();
-        Optional<Stock> stockOptional = stockService.findStockByCode(creationRequest.getStockCode());
-        if (stockOptional.isPresent()) {
-            return stockWatchService.saveNewStockWatch(creationRequest, userId, stockOptional);
-        }
-        throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Specified stock not found.");
+        return getStockWatchDto(creationRequest, userId);
+    }
+
+    private StockWatchDto getStockWatchDto(StockWatchCreationRequest creationRequest, long userId) {
+        String stockCode = creationRequest.getStockCode();
+        Stock stockOptional = stockService.findStockByCode(stockCode)
+                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND, "Stock with code " + stockCode + " not found."));
+        return stockWatchService.saveNewStockWatch(creationRequest, userId, stockOptional);
     }
 
     @PostMapping("/update-watch") // Todo: Override default error handling to forward exception messages to the client.

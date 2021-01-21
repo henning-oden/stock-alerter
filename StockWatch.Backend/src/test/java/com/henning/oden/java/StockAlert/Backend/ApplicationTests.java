@@ -73,11 +73,8 @@ class ApplicationTests {
 	@Test
 	@Order(1)
 	void userDetailsFindsDefaultUser() {
-		SystemUserRepository repo = (SystemUserRepository) factory.getBean("systemUserRepository");
 
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-		detailsService = new CustomUserDetailsService(repo);
+		detailsService = (CustomUserDetailsService) factory.getBean("customUserDetailsService");
 
 		assertThat(detailsService.loadUserByUsername("Test")).isNotNull();
 	}
@@ -110,7 +107,7 @@ class ApplicationTests {
 
 		jwtTokenProvider = (JwtTokenProvider) factory.getBean("jwtTokenProvider");
 
-		detailsService = new CustomUserDetailsService(userRepository);
+		detailsService = (CustomUserDetailsService) factory.getBean("customUserDetailsService");
 
 		SystemUser user = (SystemUser) detailsService.loadUserByUsername("Test");
 

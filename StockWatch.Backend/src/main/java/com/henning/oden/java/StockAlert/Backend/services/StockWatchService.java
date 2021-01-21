@@ -54,8 +54,7 @@ public class StockWatchService {
         stockWatches.delete(stockWatch);
     }
 
-    public StockWatchDto saveNewStockWatch(StockWatchCreationRequest creationRequest, long userId, Optional<Stock> stockOptional) {
-        Stock stock = stockOptional.get();
+    public StockWatchDto saveNewStockWatch(StockWatchCreationRequest creationRequest, long userId, Stock stock) {
         long stockId = stock.getId();
         StockWatch stockWatch = new StockWatch(userId, stockId, creationRequest.getMinPrice(), creationRequest.getMaxPrice(), creationRequest.getAlertThreshold());
         StockWatch savedStockWatch = saveStockWatch(stockWatch);

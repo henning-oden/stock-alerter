@@ -39,9 +39,13 @@ public class JwtAuthenticationService {
     }
 
     public String getCurrentUserUsername(HttpServletRequest req) {
-        String username = jwtTokenProvider.getUsernameFromRequest(req);
-        UserDetails authenticatedUser = userDetailsService.loadUserByUsername(username);
+        UserDetails authenticatedUser = getUserDetailsFromRequest(req);
         Authentication claims = jwtTokenProvider.getAuthentication(authenticatedUser);
         return claims.getName();
+    }
+
+    private UserDetails getUserDetailsFromRequest(HttpServletRequest req) {
+        String username = jwtTokenProvider.getUsernameFromRequest(req);
+        return userDetailsService.loadUserByUsername(username);
     }
 }
