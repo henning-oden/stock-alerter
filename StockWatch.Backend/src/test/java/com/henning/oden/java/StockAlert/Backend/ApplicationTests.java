@@ -116,7 +116,9 @@ class ApplicationTests {
 
 		Stock stock = stockRepository.findByCode("TEST").get();
 
-		StockWatch stockWatch = new StockWatch(user.getId(), stock.getId(), BigDecimal.valueOf(100), BigDecimal.valueOf(110), 5);
+		StockWatch stockWatch = new StockWatch.Builder(user.getId())
+										.forStockId(stock.getId()) // Sets id to 1 instead of the expected value. Investigate!
+										.withMinPrice(BigDecimal.valueOf(100)).withMaxPrice(BigDecimal.valueOf(110)).withAlertThreshold(5).build();
 		StockWatch savedStockWatch = stockWatchRepository.save(stockWatch);
 		stockWatchId = savedStockWatch.getId();
 

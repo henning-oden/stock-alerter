@@ -1,7 +1,10 @@
 package com.henning.oden.java.StockAlert.Backend.entities;
 
+import com.henning.oden.java.StockAlert.Backend.dto.RegistrationRequest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -14,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -43,6 +47,17 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     public SystemUser(){
         super("temp", "temp", new ArrayList<>() {
         });
+    }
+
+    public static SystemUser fromRegistrationRequest(RegistrationRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return fromRegistrationRequest(request, passwordEncoder);
+    }
+
+    public static SystemUser fromRegistrationRequest(RegistrationRequest request, PasswordEncoder passwordEncoder) {
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        return new SystemUser(request.getUsername(), encodedPassword, request.getEmail(), false, new ArrayList<GrantedAuthority>(Collections.singleton(
+                new SimpleGrantedAuthority("USER"))));
     }
 
     public SystemUser(String username, String password, String emailAddress, boolean emailVerified, Collection<? extends GrantedAuthority> authorities) {

@@ -1,10 +1,15 @@
 package com.henning.oden.java.StockAlert.Backend.services;
 
+import com.henning.oden.java.StockAlert.Backend.dto.StockWatchCreationRequest;
+import com.henning.oden.java.StockAlert.Backend.dto.StockWatchDto;
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
 import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +17,11 @@ import java.util.Optional;
 @Service
 public class StockWatchService {
     private final StockWatchRepository stockWatches;
+    private final ModelMapper modelMapper;
 
-    public StockWatchService (StockWatchRepository watches) {
+    public StockWatchService (StockWatchRepository watches, ModelMapper modelMapper) {
         stockWatches = watches;
+        this.modelMapper = modelMapper;
     }
 
     public List<StockWatch> findStockWatchesByStock(Stock stock) {
@@ -47,7 +54,37 @@ public class StockWatchService {
         stockWatches.delete(stockWatch);
     }
 
+    public StockWatchDto saveNewStockWatch(StockWatchCreationRequest creationRequest, long userId, Optional<Stock> stockOptional) {
+        Stock stock = stockOptional.get();
+        long stockId = stock.getId();
+        StockWatch stockWatch = new StockWatch(userId, stockId, creationRequest.getMinPrice(), creationRequest.getMaxPrice(), creationRequest.getAlertThreshold());
+        StockWatch savedStockWatch = saveStockWatch(stockWatch);
+        return getStockWatchDto(savedStockWatch);
+    }
+
+    private StockWatchDto getStockWatchDto(StockWatch savedStockWatch) {
+        StockWatchDto stockWatchDto = modelMapper.map(savedStockWatch, StockWatchDto.class);
+        return stockWatchDto;
+    }
+
     public Optional<StockWatch> findById(long id) {
         return stockWatches.findById(id);
     }
+
+    public StockWatchDto updateStockWatchService(long id, StockWatchCreationRequest creationRequest) {
+        Optional<StockWatch> stockWatchOptional = findById(id);
+        if (stockWatchOptional.isPresent()) {
+            return updateStockWatch(creationRequest, stockWatchOptional.get());
+        }
+        throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Stock watch with id " + id + " not found.");
+    }
+
+
+
+    private StockWatchDto  updateStockWatch(StockWatchCreationRequest creationRequest, StockWatch stockWatch) {
+        modelMapper.map(creationRequest, stockWatch);
+        StockWatch savedStockWatch = saveStockWatch(stockWatch);
+        return getStockWatchDto(savedStockWatch);
+    }
+
 }

@@ -4,14 +4,9 @@ import com.henning.oden.java.StockAlert.Backend.dto.RegistrationRequest;
 import com.henning.oden.java.StockAlert.Backend.dto.RegistrationResponse;
 import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 @Service
 @AllArgsConstructor
@@ -25,8 +20,7 @@ public class UserRegistrationService {
         try {
             userDetailsService.loadUserByUsername(registrationRequest.getUsername());
         } catch (UsernameNotFoundException ex) {
-            SystemUser user = new SystemUser(registrationRequest.getUsername(), passwordEncoder.encode(registrationRequest.getPassword()), registrationRequest.getEmail(), false, new ArrayList<GrantedAuthority>(Collections.singleton(
-                    new SimpleGrantedAuthority("USER"))));
+            SystemUser user = SystemUser.fromRegistrationRequest(registrationRequest);
             try {
                 SystemUser savedUser = userDetailsService.save(user);
                 emailService.sendRegistrationConfirmationEmail(registrationRequest, savedUser.getId());
