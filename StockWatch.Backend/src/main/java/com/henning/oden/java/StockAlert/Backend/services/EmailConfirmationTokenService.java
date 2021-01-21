@@ -24,25 +24,20 @@ public class EmailConfirmationTokenService {
     }
 
     public ValidationResponse verifyEmail(String token) {
-        Optional<EmailConfirmationToken> confirmationTokenOptional = confirmationTokenRepository.findByToken(token);
-        if (confirmationTokenOptional.isPresent()) {
-            EmailConfirmationToken confirmationToken = confirmationTokenOptional.get();
-            if (!confirmationToken.getIsUsed()) {
-                verifyUserEmail(confirmationToken);
-                consumeConfirmationToken(confirmationToken);
-                return new ValidationResponse("Success", "E-mail successfully validated. You may now log in.");
-            }
+        EmailConfirmationToken confirmationToken = confirmationTokenRepository.findByToken(token);
+        if (confirmationToken != null && !confirmationToken.getIsUsed()) {
+            verifyUserEmail(confirmationToken);
+            consumeConfirmationToken(confirmationToken);
+            return new ValidationResponse("Success", "E-mail successfully validated. You may now log in.");
+
         }
         return new ValidationResponse("Failure", "You have used an invalid validation token.");
     }
 
     private void verifyUserEmail(EmailConfirmationToken confirmationToken) {
-        Optional<SystemUser> userOptional = userDetailsService.findById(confirmationToken.getUserId());
-        if (userOptional.isPresent()) {
-            userDetailsService.verifyUserEmail(userOptional.get());
-        } else {
-            throw new RuntimeException("User not found by id " + confirmationToken.getUserId() + "!");
-        }
+        SystemUser user = userDetailsService.findById(confirmationToken.getUserId()).orElseThrow(() ->
+                new RuntimeException("User not found by id " + confirmationToken.getUserId() + "!"));
+        userDetailsService.verifyUserEmail(user);
     }
 
     private void consumeConfirmationToken(EmailConfirmationToken confirmationToken) {
