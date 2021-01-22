@@ -56,7 +56,10 @@ public class StockWatchService {
 
     public StockWatchDto saveNewStockWatch(StockWatchCreationRequest creationRequest, long userId, Stock stock) {
         long stockId = stock.getId();
-        StockWatch stockWatch = new StockWatch(userId, stockId, creationRequest.getMinPrice(), creationRequest.getMaxPrice(), creationRequest.getAlertThreshold());
+        StockWatch stockWatch = new StockWatch.Builder(userId)
+                                              .forStockId(stockId)
+                                              .fromCreationRequest(creationRequest)
+                                              .build();
         StockWatch savedStockWatch = saveStockWatch(stockWatch);
         return getStockWatchDto(savedStockWatch);
     }

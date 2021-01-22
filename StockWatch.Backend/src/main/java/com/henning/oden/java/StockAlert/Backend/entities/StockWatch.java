@@ -75,6 +75,13 @@ public class StockWatch {
             return this;
         }
 
+        public Builder fromCreationRequest(StockWatchCreationRequest creationRequest) {
+            this.minPrice = creationRequest.getMinPrice();
+            this.maxPrice = creationRequest.getMaxPrice();
+            this.alertThreshold = creationRequest.getAlertThreshold();
+            return this;
+        }
+
         public Builder withMinPrice(BigDecimal minPrice) {
             this.minPrice = minPrice;
             return this;
