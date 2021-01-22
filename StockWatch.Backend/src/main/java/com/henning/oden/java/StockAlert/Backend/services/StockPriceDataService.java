@@ -94,11 +94,11 @@ public class StockPriceDataService {
         System.out.println("Stock watches for stock with code " + code + " have been checked.");
     }
 
-    private void saveStockPriceData(long stockId, Bar bar) {
+    private StockPriceData saveStockPriceData(long stockId, Bar bar) {
         Instant barTime = Instant.ofEpochSecond(bar.getT()).plus(1, ChronoUnit.MINUTES);
         ZonedDateTime zonedBarStartTime = ZonedDateTime.ofInstant(barTime, ZoneId.of("America/New_York"));
         StockPriceData priceData = new StockPriceData(stockId, BigDecimal.valueOf(bar.getC()), zonedBarStartTime);
-        saveStockPriceData(priceData);
+        return saveStockPriceData(priceData);
     }
 
     public StockPriceData saveStockPriceData(StockPriceData stockPriceData) {
