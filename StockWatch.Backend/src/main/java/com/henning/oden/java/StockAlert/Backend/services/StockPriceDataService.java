@@ -82,8 +82,8 @@ public class StockPriceDataService {
             List<StockWatch> stockWatches = stockWatchService.findStockWatchesByStock(stock);
             if (bars.size() > 0) {
                 Bar bar = bars.get(0);
-                updateStockWatches(code, bar, stockWatches);
                 saveStockPriceData(stock.getId(), bar);
+                updateStockWatches(code, bar, stockWatches);
             }
 
         } else

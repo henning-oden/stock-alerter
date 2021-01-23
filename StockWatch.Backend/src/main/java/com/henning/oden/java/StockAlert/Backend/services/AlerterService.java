@@ -27,9 +27,9 @@ public class AlerterService {
         SystemUser user = userDetailsService.findById(userId).orElseThrow(RuntimeException::new);
         String userEmail = user.getEmailAddress();
         String username = user.getUsername();
-        String stockCode = stock.getCode();
+        String stockCommonName = stock.getCommonName();
         BigDecimal stockPrice = stockPriceDataService.getLastPriceForStock(stock);
-        StockAlertDto alertDto = new StockAlertDto(userEmail, username, stockCode, stockPrice);
+        StockAlertDto alertDto = new StockAlertDto(userEmail, username, stockCommonName, stockPrice);
         emailService.sendStockAlertEmail(alertDto);
     }
 
