@@ -30,6 +30,10 @@ public class StockService {
         return savedStock;
     }
 
+    public Optional<Stock> findById(long id) {
+        return stockRepository.findById(id);
+    }
+
     public void deleteStock(Stock stock) {
         stockRepository.delete(stock);
     }

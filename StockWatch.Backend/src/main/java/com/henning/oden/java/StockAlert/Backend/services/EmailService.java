@@ -1,6 +1,7 @@
 package com.henning.oden.java.StockAlert.Backend.services;
 
 import com.henning.oden.java.StockAlert.Backend.dto.RegistrationRequest;
+import com.henning.oden.java.StockAlert.Backend.dto.StockAlertDto;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -8,7 +9,6 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +35,10 @@ public class EmailService {
         Mail mail = new Mail(from, subject, to, content);
         SendGrid sg = new SendGrid(sendGridKey);
         Request request = new Request();
+        return sendMail(mail, sg, request);
+    }
+
+    private boolean sendMail(Mail mail, SendGrid sg, Request request) {
         try {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
@@ -48,5 +52,19 @@ public class EmailService {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    public boolean sendStockAlertEmail(StockAlertDto stockAlertDto) {
+        Email from = new Email("henning.oden@outlook.com");
+        String subject = "Stock watch alert!";
+        Email to = new Email(stockAlertDto.getEmailAddress());
+        Content content = new Content("text/plain",
+                "Your stock watch for the stock " + stockAlertDto.getStockCommonName()
+                        + " has triggered! Last recorded price was " + stockAlertDto.getLastPrice().toString()
+                        + " dollars.");
+        Mail mail = new Mail(from, subject, to, content);
+        SendGrid sg = new SendGrid(sendGridKey);
+        Request request = new Request();
+        return sendMail(mail, sg, request);
     }
 }

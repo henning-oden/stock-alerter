@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StockPriceDataRepository extends JpaRepository<StockPriceData, Long> {
     public void deleteByStockId(long stockId);
+
+    StockPriceData findTopByStockIdOrderByTimeDesc(long stockId);
 }
