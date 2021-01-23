@@ -48,4 +48,16 @@ public class JwtAuthenticationService {
         String username = jwtTokenProvider.getUsernameFromRequest(req);
         return userDetailsService.loadUserByUsername(username);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "JwtAuthenticationService{" +
+                "userDetailsService=" + userDetailsService +
+                ", authenticationManager=" + authenticationManager +
+                ", jwtTokenProvider=" + jwtTokenProvider +
+                '}';
+    }
 }

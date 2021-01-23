@@ -14,4 +14,12 @@ public class StockWatchAlertEvent extends ApplicationEvent {
         super(stockWatch);
         this.stockWatch = stockWatch;
     }
+
+    /**
+     * This method gives a brief summary of the event, including the toString() method of the associated StockWatch..
+     */
+    @Override
+    public String toString() {
+        return "Alert event for " + stockWatch.toString();
+    }
 }

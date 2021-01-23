@@ -89,4 +89,14 @@ public class StockWatchService {
         return getStockWatchDto(savedStockWatch);
     }
 
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "StockWatchService{" +
+                "stockWatches=" + stockWatches +
+                ", modelMapper=" + modelMapper +
+                '}';
+    }
 }

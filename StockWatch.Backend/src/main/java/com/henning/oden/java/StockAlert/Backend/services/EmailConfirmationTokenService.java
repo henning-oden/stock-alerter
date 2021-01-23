@@ -44,4 +44,15 @@ public class EmailConfirmationTokenService {
         confirmationToken.setIsUsed(true);
         confirmationTokenRepository.saveAndFlush(confirmationToken);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "EmailConfirmationTokenService{" +
+                "userDetailsService=" + userDetailsService +
+                ", confirmationTokenRepository=" + confirmationTokenRepository +
+                '}';
+    }
 }

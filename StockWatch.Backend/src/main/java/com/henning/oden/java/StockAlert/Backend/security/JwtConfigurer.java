@@ -21,4 +21,15 @@ public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilt
         JwtTokenFilter customFilter = new JwtTokenFilter(jwtTokenProvider, authenticationManager);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "JwtConfigurer{" +
+                "jwtTokenProvider=" + jwtTokenProvider +
+                ", authenticationManager=" + authenticationManager +
+                '}';
+    }
 }

@@ -40,4 +40,17 @@ public class EmailConfirmationToken {
     public void setIsUsed(boolean isUsed) {
         this.isUsed = isUsed;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "EmailConfirmationToken{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", token='" + token + '\'' +
+                ", isUsed=" + isUsed +
+                '}';
+    }
 }

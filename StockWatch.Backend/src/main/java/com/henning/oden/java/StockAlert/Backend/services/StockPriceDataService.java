@@ -124,4 +124,20 @@ public class StockPriceDataService {
         StockPriceData savedStockPriceData = stockPriceDataRepository.saveAndFlush(stockPriceData);
         return savedStockPriceData;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "StockPriceDataService{" +
+                "applicationEventPublisher=" + applicationEventPublisher +
+                ", stockPriceDataRepository=" + stockPriceDataRepository +
+                ", stockService=" + stockService +
+                ", stockWatchService=" + stockWatchService +
+                ", keyId='" + keyId + '\'' +
+                ", secret='" + secret + '\'' +
+                ", alpacaBaseUrl='" + alpacaBaseUrl + '\'' +
+                '}';
+    }
 }

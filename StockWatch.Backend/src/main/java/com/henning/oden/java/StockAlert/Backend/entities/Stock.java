@@ -40,4 +40,16 @@ public class Stock {
         this.code = code;
         this.commonName = commonName;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "Stock{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", commonName='" + commonName + '\'' +
+                '}';
+    }
 }

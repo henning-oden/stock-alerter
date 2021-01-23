@@ -39,4 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().apply(new JwtConfigurer(jwtTokenProvider, authenticationManager()));
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "WebSecurityConfig{" +
+                "jwtTokenProvider=" + jwtTokenProvider +
+                ", userDetailsService=" + userDetailsService +
+                '}';
+    }
 }

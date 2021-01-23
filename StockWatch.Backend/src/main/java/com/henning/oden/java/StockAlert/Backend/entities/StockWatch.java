@@ -59,6 +59,22 @@ public class StockWatch {
         this.alertThreshold = alertThreshold < 1 ? 5 : alertThreshold;
     }
 
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "StockWatch{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", stockId=" + stockId +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", timesExceeded=" + timesExceeded +
+                ", alertThreshold=" + alertThreshold +
+                '}';
+    }
+
     public static class Builder {
         private long userId;
         private long stockId;

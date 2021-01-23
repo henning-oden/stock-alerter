@@ -5,4 +5,9 @@ import lombok.Value;
 @Value
 public class UserInfoResponse {
     private String username;
+
+    @Override
+    public String toString() {
+        return username;
+    }
 }

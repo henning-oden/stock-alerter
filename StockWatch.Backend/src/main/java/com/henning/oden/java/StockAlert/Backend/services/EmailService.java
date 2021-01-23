@@ -67,4 +67,15 @@ public class EmailService {
         Request request = new Request();
         return sendMail(mail, sg, request);
     }
+
+    /**
+     *Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "EmailService{" +
+                "emailConfirmationTokenService=" + emailConfirmationTokenService +
+                ", sendGridKey='" + sendGridKey + '\'' +
+                '}';
+    }
 }

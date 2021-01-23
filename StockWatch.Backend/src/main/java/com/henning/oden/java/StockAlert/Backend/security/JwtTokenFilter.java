@@ -28,4 +28,15 @@ public class JwtTokenFilter extends GenericFilterBean {
         }
         filterChain.doFilter(req, res);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "JwtTokenFilter{" +
+                "jwtTokenProvider=" + jwtTokenProvider +
+                ", authenticationManager=" + authenticationManager +
+                '}';
+    }
 }

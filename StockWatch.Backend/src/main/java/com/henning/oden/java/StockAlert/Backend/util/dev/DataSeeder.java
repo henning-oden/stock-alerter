@@ -37,4 +37,15 @@ public class DataSeeder {
                             new SimpleGrantedAuthority("USER")))));
         }
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "DataSeeder{" +
+                "systemUserRepository=" + systemUserRepository +
+                ", passwordEncoder=" + passwordEncoder +
+                '}';
+    }
 }

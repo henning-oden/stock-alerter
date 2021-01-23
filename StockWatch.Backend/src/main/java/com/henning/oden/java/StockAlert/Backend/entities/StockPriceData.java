@@ -37,4 +37,17 @@ public class StockPriceData {
         this.price = price;
         this.time = time;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "StockPriceData{" +
+                "id=" + id +
+                ", stockId=" + stockId +
+                ", price=" + price +
+                ", time=" + time +
+                '}';
+    }
 }

@@ -48,4 +48,14 @@ public class StockService {
     public List<Stock> findByCommonNameContainingIgnoreCase(String commonNamePart) {
         return  stockRepository.findByCommonNameContainingIgnoreCase(commonNamePart);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "StockService{" +
+                "stockRepository=" + stockRepository +
+                '}';
+    }
 }

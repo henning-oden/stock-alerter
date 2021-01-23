@@ -35,4 +35,16 @@ public class UserRegistrationService {
         RegistrationResponse response = new RegistrationResponse("Failure", "User with username " + registrationRequest.getUsername() + " already exists.");
         return response;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "UserRegistrationService{" +
+                "emailService=" + emailService +
+                ", passwordEncoder=" + passwordEncoder +
+                ", userDetailsService=" + userDetailsService +
+                '}';
+    }
 }

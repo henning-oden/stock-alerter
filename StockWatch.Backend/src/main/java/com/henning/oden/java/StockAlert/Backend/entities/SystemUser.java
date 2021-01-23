@@ -138,4 +138,19 @@ public class SystemUser extends org.springframework.security.core.userdetails.Us
     public boolean isEnabled() {
         return true;
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "SystemUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", emailVerified=" + emailVerified +
+                ", roles=" + roles +
+                '}';
+    }
 }

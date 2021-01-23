@@ -98,4 +98,16 @@ public class JwtTokenProvider {
             throw new JwtException("Expired or invalid JWT token");
         }
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "JwtTokenProvider{" +
+                "secretKey='" + secretKey + '\'' +
+                ", validityInMilliseconds=" + validityInMilliseconds +
+                ", userDetailsService=" + userDetailsService +
+                '}';
+    }
 }

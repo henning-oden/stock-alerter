@@ -22,4 +22,21 @@ public class StockWatchDto {
     private int timesExceeded;
     @Getter @Setter
     private int alertThreshold;
+
+/**
+ * Auto-generated toString() method. Format is unspecified and may change.
+ *
+ */
+    @Override
+    public String toString() {
+        return "StockWatchDto{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", stockId=" + stockId +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", timesExceeded=" + timesExceeded +
+                ", alertThreshold=" + alertThreshold +
+                '}';
+    }
 }

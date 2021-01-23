@@ -48,4 +48,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void deleteUser(SystemUser user) {
         systemUserRepository.delete(user);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "CustomUserDetailsService{" +
+                "systemUserRepository=" + systemUserRepository +
+                '}';
+    }
 }

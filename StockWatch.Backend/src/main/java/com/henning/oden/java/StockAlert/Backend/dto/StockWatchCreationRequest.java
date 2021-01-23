@@ -10,4 +10,19 @@ public class StockWatchCreationRequest {
     private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private int alertThreshold;
+
+/**
+ * Auto-generated toString() method. Format is unspecified and may change.
+ *
+ * Example: StockWatchCreationRequest{stockCode='FOO',minPrice=42,maxPrice=43,alertThreshold=5}
+ */
+    @Override
+    public String toString() {
+        return "StockWatchCreationRequest{" +
+                "stockCode='" + stockCode + '\'' +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", alertThreshold=" + alertThreshold +
+                '}';
+    }
 }

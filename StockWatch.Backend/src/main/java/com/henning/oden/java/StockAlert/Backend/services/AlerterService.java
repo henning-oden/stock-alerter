@@ -37,4 +37,17 @@ public class AlerterService {
         long stockId = alertEvent.getStockWatch().getStockId();
         return stockService.findById(stockId);
     }
+
+    /**
+     * Auto-generated toString() method. Format is unspecified and may change.
+     */
+    @Override
+    public String toString() {
+        return "AlerterService{" +
+                "emailService=" + emailService +
+                ", stockService=" + stockService +
+                ", stockPriceDataService=" + stockPriceDataService +
+                ", userDetailsService=" + userDetailsService +
+                '}';
+    }
 }
