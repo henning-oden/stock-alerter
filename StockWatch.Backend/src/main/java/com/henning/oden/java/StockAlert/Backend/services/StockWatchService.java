@@ -6,6 +6,7 @@ import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
 import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
 import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
+import org.hibernate.JDBCException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StockWatchService {
@@ -50,8 +52,14 @@ public class StockWatchService {
         return stockWatches.saveAndFlush(stockWatch);
     }
 
-    public void deleteStockWatch(StockWatch stockWatch) {
-        stockWatches.delete(stockWatch);
+    public boolean deleteStockWatch(StockWatch stockWatch) {
+        try {
+            stockWatches.delete(stockWatch);
+            return true;
+        } catch (JDBCException e) {
+            // todo; Log the exception...
+            return false;
+        }
     }
 
     public StockWatchDto saveNewStockWatch(StockWatchCreationRequest creationRequest, long userId, Stock stock) {
@@ -98,5 +106,16 @@ public class StockWatchService {
                 "stockWatches=" + stockWatches +
                 ", modelMapper=" + modelMapper +
                 '}';
+    }
+
+    public boolean userOwnsWatch(long userId, StockWatch stockWatch) {
+        return stockWatch.getUserId() == userId;
+    }
+
+    public List<StockWatchDto> getStockWatchDtosByUser(SystemUser user) {
+        List<StockWatch> stockWatches = findStockWatchesByUser(user);
+        return stockWatches.stream()
+                .map(stockWatch -> modelMapper.map(stockWatch, StockWatchDto.class))
+                .collect(Collectors.toList());
     }
 }

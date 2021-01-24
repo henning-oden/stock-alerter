@@ -1,6 +1,7 @@
 package com.henning.oden.java.StockAlert.Backend.controllers;
 // Todo: Write unit tests for this class.
 
+import com.henning.oden.java.StockAlert.Backend.dto.DeletionResponse;
 import com.henning.oden.java.StockAlert.Backend.dto.StockResponse;
 import com.henning.oden.java.StockAlert.Backend.dto.StockWatchCreationRequest;
 import com.henning.oden.java.StockAlert.Backend.dto.StockWatchDto;
@@ -12,8 +13,10 @@ import com.henning.oden.java.StockAlert.Backend.services.CustomUserDetailsServic
 import com.henning.oden.java.StockAlert.Backend.services.StockService;
 import com.henning.oden.java.StockAlert.Backend.services.StockWatchService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/stocks")
@@ -42,10 +45,18 @@ public class StocksController {
 
     @PostMapping("/create-watch")
     public StockWatchDto createStockWatch(HttpServletRequest httpRequest, @RequestBody StockWatchCreationRequest creationRequest) {
-        String username = jwtTokenProvider.getUsernameFromRequest(httpRequest);
-        SystemUser user = (SystemUser) userDetailsService.loadUserByUsername(username);
-        long userId = user.getId();
+        long userId = getUserId(httpRequest);
         return getStockWatchDto(creationRequest, userId);
+    }
+
+    private long getUserId(HttpServletRequest httpRequest) {
+        SystemUser user = getUser(httpRequest);
+        return user.getId();;
+    }
+
+    private SystemUser getUser(HttpServletRequest httpRequest) {
+        String username = jwtTokenProvider.getUsernameFromRequest(httpRequest);
+        return (SystemUser) userDetailsService.loadUserByUsername(username);
     }
 
     private StockWatchDto getStockWatchDto(StockWatchCreationRequest creationRequest, long userId) {
@@ -62,5 +73,45 @@ public class StocksController {
     public StockWatchDto updateStockWatch(HttpServletRequest httpRequest, @RequestParam long id,
                                           @RequestBody StockWatchCreationRequest creationRequest) {
         return stockWatchService.updateStockWatchService(id, creationRequest);
+    }
+
+    @GetMapping("/get-watches")
+    public List<StockWatchDto> getStockWatches(HttpServletRequest httpRequest) {
+        SystemUser user = getUser(httpRequest);
+        return stockWatchService.getStockWatchDtosByUser(user);
+    }
+
+    @GetMapping("/get-watch")
+    public StockWatchDto getStockWatch(HttpServletRequest httpRequest, @RequestParam long id) {
+        StockWatch stockWatch = getStockWatch(id);
+        long userId = getUserId(httpRequest);
+        if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
+            StockWatchDto stockWatchDto = modelMapper.map(stockWatch, StockWatchDto.class);
+            return stockWatchDto;
+        }
+        throw stockWatchNotFound(id);
+    }
+
+    private StockWatch getStockWatch(long id) {
+        StockWatch stockWatch = stockWatchService.findById(id).orElseThrow(() -> stockWatchNotFound(id));
+        return stockWatch;
+    }
+
+    @NotNull
+    private HttpClientErrorException stockWatchNotFound(long id) {
+        return new HttpClientErrorException(HttpStatus.NOT_FOUND, "Stock watch with id " + id + " not found.");
+    }
+
+    @DeleteMapping("/delete-watch")
+    public DeletionResponse deleteStockWatch (HttpServletRequest httpRequest, @RequestParam long id) {
+        StockWatch stockWatch = getStockWatch(id);
+        long userId = getUserId(httpRequest);
+        if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
+            boolean result = stockWatchService.deleteStockWatch(stockWatch);
+            if (result) {
+                return new DeletionResponse("Success", "Stock watch with id " + id + " deleted.");
+            }
+        }
+        return new DeletionResponse("Failure", "Could not delete stock watch with id " + id + ".");
     }
 }
