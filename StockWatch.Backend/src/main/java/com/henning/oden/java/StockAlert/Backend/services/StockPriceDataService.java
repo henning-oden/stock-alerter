@@ -96,7 +96,7 @@ public class StockPriceDataService {
 //        System.out.println(stockPrice);
         stockWatches.forEach(sw -> {
             sw.setTimesExceeded(stockPrice.compareTo(sw.getMinPrice()) < 0 || stockPrice.compareTo(sw.getMaxPrice()) > 0 ?
-                    sw.getTimesExceeded() + 1 : sw.getTimesExceeded());
+                    sw.getTimesExceeded() + 1 : 0);
             sw = stockWatchService.saveStockWatch(sw);
             if (sw.getTimesExceeded() >= sw.getAlertThreshold()) {
                 alertUser(sw);
