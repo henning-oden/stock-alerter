@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   }
 });
 
-function RegisterForm() {
+const RegisterForm = () => {
   const classes = useStyles();
   return (
     <div className="formContainer">

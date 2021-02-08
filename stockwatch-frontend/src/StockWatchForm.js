@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   },
 });
 
-function StockWatchForm(stockCode, stockWatchId) {
+const StockWatchForm = (stockCode, stockWatchId) => {
   const watchIdNumber = stockWatchId ? Number.parseInt(stockWatchId) : 0;
   const classes = useStyles();
   return (

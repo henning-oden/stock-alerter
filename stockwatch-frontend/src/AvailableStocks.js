@@ -30,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-function AvailableStocks() {
+const AvailableStocks = () => {
   const classes = useStyles();
   return (
     <div>

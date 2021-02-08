@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Header() {
+const Header = () => {
   const classes = useStyles();
   return (
     <AppBar position="static" className={classes.menuBar} color="primary">

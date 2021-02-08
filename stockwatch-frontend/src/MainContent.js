@@ -1,14 +1,23 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import { Link, Typography } from '@material-ui/core';
+import { useContext } from 'react';
+import { MainContext } from "./MainContext";
+import { Button, TextField, Typography } from '@material-ui/core';
 
 
-function MainContent() {
+const UpdateName = (setName) => {
+    const textField = document.getElementById("nameField");
+    const userName = textField.value;
+    setName(userName);
+}
+
+const MainContent = () => {
+    const { name, setName } = useContext(MainContext);
     return (
         <div>
+            <TextField name="Name" variant="outlined" color="primary" id="nameField" />
+            <Button variant="contained" color="primary" onClick={() => {UpdateName(setName);}}>Set Name</Button>
             <Typography variant="h1">
-                    Welcome to Stock Alerter!
+                    Welcome, { name }, to Stock Alerter!
                 </Typography>
                 <Typography variant="h3">
                     What is this?

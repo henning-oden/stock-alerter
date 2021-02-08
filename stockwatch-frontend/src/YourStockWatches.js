@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Divider, Grid, makeStyles, Typography }  from "@material-ui/core";
 import StockWatchForm from './StockWatchForm';
 
-function getStockWatches(userId) {
+const getStockWatches = (userId) => {
     // todo: Actually fetch from detabase rather than hard-code
     const watches = [
         {
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
     }
 })
 
-function YourStockWatches() {
+const YourStockWatches = () => {
     const classes = useStyles();
     return (
         <div>

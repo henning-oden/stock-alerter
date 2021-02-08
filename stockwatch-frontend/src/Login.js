@@ -7,7 +7,7 @@ const useStyles = makeStyles({
     }
 });
 
-function LoginForm() {
+const LoginForm = () => {
     const classes = useStyles();
     return (
         <div>
