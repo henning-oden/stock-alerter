@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Grid, makeStyles, TextField, Typography } from "@material-ui/core";
+import { useContext } from 'react';
+import { Button, Grid, Link, makeStyles, TextField, Typography } from "@material-ui/core";
+import { ComponentContext } from "./ComponentProvider";
+
+const SetMainContentComponent = (setCurrentComponent) => {
+  setCurrentComponent('main');
+}
 
 const useStyles = makeStyles({
     registerButton: {
@@ -8,6 +14,7 @@ const useStyles = makeStyles({
 });
 
 const LoginForm = () => {
+    const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
     const classes = useStyles();
     return (
         <div>
@@ -23,12 +30,13 @@ const LoginForm = () => {
             <TextField id="password" label="Password" variant="outlined" />
           </Grid>
           <Grid item>
-              <Button className={classes.registerButton} variant="contained" color="primary" edge="end">
+              <Button className={classes.registerButton} variant="contained" color="primary" edge="end" onClick={() => alert('Not implemented')}>
                   Login
               </Button>
           </Grid>
         </Grid>
       </form>
+      <Button onClick={() => SetMainContentComponent(setCurrentComponent)}>Home</Button>
       </div>
     );
 }

@@ -36,7 +36,7 @@ const RegisterForm = () => {
             />
           </Grid>
           <Grid item>
-              <Button className={classes.registerButton} variant="contained" color="primary" edge="end">
+              <Button className={classes.registerButton} variant="contained" color="primary" edge="end" onClick={() => alert('Not implemented.')}>
                   Register
               </Button>
           </Grid>

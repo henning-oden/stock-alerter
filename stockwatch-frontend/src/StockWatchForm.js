@@ -29,7 +29,7 @@ const StockWatchForm = (stockCode, stockWatchId) => {
             <TextField variant="outlined" id="minPrice" label="Min Price" />
           </Grid>
           <Grid item>
-            <Button variant="contained" classname={classes.createButton}>
+            <Button variant="contained" classname={classes.createButton} onClick={() => alert('Not implemented.')}>
               Create Watch
             </Button>
           </Grid>

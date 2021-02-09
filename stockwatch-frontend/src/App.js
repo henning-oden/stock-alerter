@@ -1,5 +1,5 @@
-import React from 'react';
-import { useContext, useState } from 'react';
+import React from "react";
+import { useContext, useState } from "react";
 import { Grid } from "@material-ui/core";
 import Header from "./Header";
 import MainContent from "./MainContent";
@@ -11,20 +11,34 @@ import StockWatchForm from "./StockWatchForm";
 import { ComponentContext } from "./ComponentProvider";
 
 const GetActiveComponent = (activeComponent) => {
-  return (DetermineActiveComponent(activeComponent));
-}
+  return DetermineActiveComponent(activeComponent);
+};
 
 const DetermineActiveComponent = (activeComponent) => {
   switch (activeComponent) {
-    case 'main':
+    case "main":
       return <MainContent />;
+    case "login":
+      return <LoginForm />;
+    case "login":
+      return <StockWatchForm />;
+    case "availableStocks":
+      return <AvailableStocks />;
+    case "watches":
+      return <YourStockWatches />;
+    case "watchForm":
+      return <StockWatchForm />;
+    case "register":
+      return <RegisterForm />;
     default:
       return null;
   }
-}
+};
 
 const App = () => {
-  const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
+  const { currentComponent, setCurrentComponent } = useContext(
+    ComponentContext
+  );
   let currentlyActiveComponent = GetActiveComponent(currentComponent);
   return (
     <Grid container direction="column">
@@ -40,6 +54,6 @@ const App = () => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default App;

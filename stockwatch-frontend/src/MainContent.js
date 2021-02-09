@@ -1,29 +1,23 @@
 import React from 'react';
 import { useContext } from 'react';
-import { MainContext } from "./MainContext";
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, Link, TextField, Typography } from '@material-ui/core';
+import { ComponentContext } from './ComponentProvider';
 
 
-const UpdateName = (setName) => {
-    const textField = document.getElementById("nameField");
-    const userName = textField.value;
-    setName(userName);
+const SetAvailableStocksComponent = (setCurrentComponent) => {
+    setCurrentComponent("availableStocks");
 }
 
 const MainContent = () => {
-    const { name, setName } = useContext(MainContext);
+    const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
     return (
-        <div>
-            <TextField name="Name" variant="outlined" color="primary" id="nameField" />
-            <Button variant="contained" color="primary" onClick={() => {UpdateName(setName);}}>Set Name</Button>
-            <Typography variant="h1">
-                    Welcome, { name }, to Stock Alerter!
-                </Typography>
+        <div>                    
                 <Typography variant="h3">
                     What is this?
                 </Typography>
                 <Typography variant="body1">
                     Stock Alerter is a program that allows users to search for stocks and create watches for specific stocks they want to keep track of. The maximum and minimum prices for the stock will be checked against the current price, and whenever the price has been outside of the interval formed by the prices for a number of price fetches equal to the Alert Threshold for the watch, a notification will be sent to the user. Currently, this can happen at most once per day per user and via e-mail only.
+                    <Link onClick={(event) => {event.preventDefault(); SetAvailableStocksComponent(setCurrentComponent)}}>Click here</Link> to list the currently available stocks.
                 </Typography>
                 <Typography variant="h3">
                     Why Stock Alerter?
@@ -37,7 +31,7 @@ const MainContent = () => {
                     How does this work?
                 </Typography>
                 <Typography variant="body1">
-                    This program is written using Java for the backend and with a web application written in JavaScript. The database supporting the storage of the data is currently a MySQL 8 database. The back end uses Spring Boot with JPA, Lombok, JWT and the Alpaca Java API for getting stock price information.
+                    This program is written using Java for the backend and with a web application written in JavaScript with the React framework. The database supporting the storage of the data is currently a MySQL 8 database. The back end uses Spring Boot with JPA, Lombok, JWT and the Alpaca Java API for getting stock price information.
                 </Typography>
                 <Typography variant="h3">
                     What does this cost?

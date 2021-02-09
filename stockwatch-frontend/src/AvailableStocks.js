@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
+import { ComponentContext } from "./ComponentProvider";
 
 function getStocks() {
   // Actually retrieve from database later
@@ -30,7 +31,12 @@ const useStyles = makeStyles({
   },
 });
 
+const SetStockWatchFormComponent = (setCurrentComponent) => {
+  setCurrentComponent('watchForm');
+}
+
 const AvailableStocks = () => {
+  const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
   const classes = useStyles();
   return (
     <div>
@@ -43,7 +49,7 @@ const AvailableStocks = () => {
           <Grid item key={index}>
             <Typography variant="h4">{stock.code}</Typography>
             <Typography variant="h5">{stock.commonname}</Typography>
-            <Button className={classes.createWatch} color="primary">
+            <Button className={classes.createWatch} color="primary" onClick={() => SetStockWatchFormComponent(setCurrentComponent)}>
               Create Watch
             </Button>
           </Grid>
