@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { ComponentContext } from "./ComponentProvider";
+import { MainContext } from "./MainContext";
 
 const SetLoginComponent = (setCurrentComponent) => {
   setCurrentComponent("login");
@@ -17,6 +18,10 @@ const SetLoginComponent = (setCurrentComponent) => {
 
 const SetRegisterComponent = (setCurrentComponent) => {
   setCurrentComponent("register");
+}
+
+const SignOut = (setIsSignedIn) => {
+  setIsSignedIn(false);
 }
 
 const useStyles = makeStyles({
@@ -30,7 +35,22 @@ const useStyles = makeStyles({
 
 const Header = () => {
   const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
+  const { signedIn, token } = useContext(MainContext);
+  const {isSignedIn, setIsSignedIn} = signedIn;
   const classes = useStyles();
+  const LoginButton = isSignedIn ? null : (
+    <Button color="inherit" edge="end" onClick={() => {SetLoginComponent(setCurrentComponent);}}>
+  Login
+</Button>);
+const registerButton = isSignedIn ? null : (
+  <Button color="inherit" edge="end" onClick={() => {SetRegisterComponent(setCurrentComponent);}}>
+  Register
+</Button>);
+const signOutButton = isSignedIn ? (
+<Button color="inherit" edge="end" onClick={() => {SignOut(setIsSignedIn);}}>
+Sign out
+</Button>
+) : null;
   return (
     <AppBar position="static" className={classes.menuBar} color="primary">
       <Toolbar>
@@ -45,12 +65,9 @@ const Header = () => {
         <Typography variant="h6" className={classes.title}>
           Stock Alerter
         </Typography>
-        <Button color="inherit" edge="end" onClick={() => {SetLoginComponent(setCurrentComponent);}}>
-          Login
-        </Button>
-        <Button color="inherit" edge="end" onClick={() => {SetRegisterComponent(setCurrentComponent);}}>
-          Register
-        </Button>
+        {LoginButton}
+        {registerButton}
+        {signOutButton}
       </Toolbar>
     </AppBar>
   );
