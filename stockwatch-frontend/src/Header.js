@@ -35,19 +35,19 @@ const useStyles = makeStyles({
 
 const Header = () => {
   const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
-  const { signedIn, token } = useContext(MainContext);
-  const {isSignedIn, setIsSignedIn} = signedIn;
+  const { state, dispatch } = useContext(MainContext);
+  const isLoggedIn = state.isLoggedIn;
   const classes = useStyles();
-  const LoginButton = isSignedIn ? null : (
+  const LoginButton = isLoggedIn ? null : (
     <Button color="inherit" edge="end" onClick={() => {SetLoginComponent(setCurrentComponent);}}>
   Login
 </Button>);
-const registerButton = isSignedIn ? null : (
+const registerButton = isLoggedIn ? null : (
   <Button color="inherit" edge="end" onClick={() => {SetRegisterComponent(setCurrentComponent);}}>
   Register
 </Button>);
-const signOutButton = isSignedIn ? (
-<Button color="inherit" edge="end" onClick={() => {SignOut(setIsSignedIn);}}>
+const signOutButton = isLoggedIn ? (
+<Button color="inherit" edge="end" onClick={() => {dispatch({ isLoggedIn: false, token: "Not set"})}}>
 Sign out
 </Button>
 ) : null;

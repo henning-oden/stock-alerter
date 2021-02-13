@@ -20,8 +20,6 @@ const DetermineActiveComponent = (activeComponent) => {
       return <MainContent />;
     case "login":
       return <LoginForm />;
-    case "login":
-      return <StockWatchForm />;
     case "availableStocks":
       return <AvailableStocks />;
     case "watches":
