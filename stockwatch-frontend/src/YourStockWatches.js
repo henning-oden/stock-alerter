@@ -1,24 +1,18 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Button, Divider, Grid, makeStyles, Typography }  from "@material-ui/core";
-import StockWatchForm from './StockWatchForm';
+import { MainContext } from './MainContext';
 
-const getStockWatches = (userId) => {
-    // todo: Actually fetch from detabase rather than hard-code
-    const watches = [
-        {
-            id: 1,
-            code: "GOOGL",
-            minPrice: 2060,
-            maxPrice: 2065,
-        },
-        {
-            id: 2,
-            code: "AAPL",
-            minPrice: 134,
-            maxPrice: 135,
+const getStockWatches = (token) => {
+    fetch('http://localhost:8080/stocks/get-watches', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         }
-    ];
-    return watches;
+    }).then(res => {res.json();})
+    .then(data => {return data;});
 }
 
 const useStyles = makeStyles({
@@ -34,11 +28,13 @@ const useStyles = makeStyles({
 })
 
 const YourStockWatches = () => {
+    const { state, dispatch } = useContext(MainContext);
+    const token = state.token;
     const classes = useStyles();
     return (
         <div>
             <Grid container direction="column">
-                {getStockWatches(0).map((stockWatch, index) => {
+                {getStockWatches(token).map((stockWatch, index) => {
                     <Grid item container direction="row">
                         <Grid item xs={4} sm={8}>
                             <Typography className={classes.stockCode}>
@@ -62,4 +58,4 @@ const YourStockWatches = () => {
     )
 }
 
-export default StockWatchForm;
+export default YourStockWatches;

@@ -36,6 +36,7 @@ const useStyles = makeStyles({
 const Header = () => {
   const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
   const { state, dispatch } = useContext(MainContext);
+  console.log(state);
   const isLoggedIn = state.isLoggedIn;
   const classes = useStyles();
   const LoginButton = isLoggedIn ? null : (
