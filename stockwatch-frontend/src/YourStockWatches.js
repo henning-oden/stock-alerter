@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 const YourStockWatches = () => {
     const { state, dispatch } = useContext(MainContext);
-    const [ watches, setWatches ] = useState({ items: []});
+    const [ watches, setWatches ] = useState([]);
     const token = state.token;
     const classes = useStyles();
 
@@ -29,10 +29,11 @@ const YourStockWatches = () => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then(res => {res.json();})
+        }).then(res => res.json())
         .then(data => {
             console.log("Setting data...");
-             setWatches(data);});
+            console.log(data);
+            setWatches(data);});
     };
 
     fetchWatches();
@@ -41,7 +42,7 @@ const YourStockWatches = () => {
     return (
         <div>
             <Grid container direction="column">
-                {watches.items.map(stockWatch => {
+                {watches.map(stockWatch => {
                     <Grid item container direction="row">
                         <Grid item xs={4} sm={8}>
                             <Typography className={classes.stockCode}>
