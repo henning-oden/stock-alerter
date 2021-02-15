@@ -1,19 +1,6 @@
-import React from 'react';
-import { useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Button, Divider, Grid, makeStyles, Typography }  from "@material-ui/core";
 import { MainContext } from './MainContext';
-
-const getStockWatches = (token) => {
-    fetch('http://localhost:8080/stocks/get-watches', {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }).then(res => {res.json();})
-    .then(data => {return data;});
-}
 
 const useStyles = makeStyles({
     stockCode: {
@@ -29,12 +16,32 @@ const useStyles = makeStyles({
 
 const YourStockWatches = () => {
     const { state, dispatch } = useContext(MainContext);
+    const [ watches, setWatches ] = useState({ items: []});
     const token = state.token;
     const classes = useStyles();
+
+    useEffect(() => {
+        const fetchWatches = async () => {
+        fetch('http://localhost:8080/stocks/get-watches', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {res.json();})
+        .then(data => {
+            console.log("Setting data...");
+             setWatches(data);});
+    };
+
+    fetchWatches();
+    }, []);
+
     return (
         <div>
             <Grid container direction="column">
-                {getStockWatches(token).map((stockWatch, index) => {
+                {watches.items.map(stockWatch => {
                     <Grid item container direction="row">
                         <Grid item xs={4} sm={8}>
                             <Typography className={classes.stockCode}>
