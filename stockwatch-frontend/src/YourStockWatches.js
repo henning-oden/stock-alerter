@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Button, Divider, Grid, makeStyles, Typography }  from "@material-ui/core";
 import { MainContext } from './MainContext';
+import { ComponentContext } from './ComponentProvider';
+import BaseUrl from './util/BaseUrl';
 
 const useStyles = makeStyles({
     stockCode: {
@@ -16,13 +18,14 @@ const useStyles = makeStyles({
 
 const YourStockWatches = () => {
     const { state, dispatch } = useContext(MainContext);
+    const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
     const [ watches, setWatches ] = useState([]);
     const token = state.token;
     const classes = useStyles();
 
     useEffect(() => {
         const fetchWatches = async () => {
-        fetch('http://localhost:8080/stocks/get-watches', {
+        fetch(BaseUrl + 'stocks/get-watches', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -37,20 +40,22 @@ const YourStockWatches = () => {
     };
 
     fetchWatches();
+    return setWatches([]);
     }, []);
 
     return (
         <div>
+            <Typography variant="h3">Your Stock Watches</Typography>
             <Grid container direction="column">
                 {watches.map(stockWatch => {
-                    <Grid item container direction="row">
+                    return (<Grid item container direction="row">
                         <Grid item xs={4} sm={8}>
                             <Typography className={classes.stockCode}>
                                 {stockWatch.code}
                             </Typography>
                             <br />
                             <Typography className={classes.priceLimits}>
-                                Max price: {stockWatch.maxPrice} /t Min price: {stockWatch.minPrice}
+                                Max price: {stockWatch.maxPrice} | Min price: {stockWatch.minPrice}
                             </Typography>
                         </Grid>
                         <Grid item xs={4} sm={2}>
@@ -59,8 +64,9 @@ const YourStockWatches = () => {
                         <Grid item xs={4} sm={2}>
                             <Button variant="contained" color="secondary">Delete</Button>
                         </Grid>
-                    </Grid>
+                    </Grid>)
                 })}
+                <Button onClick={() => setCurrentComponent('main')}>Home</Button>
             </Grid>
         </div>
     )

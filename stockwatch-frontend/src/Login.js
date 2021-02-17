@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { Button, Grid, Link, makeStyles, TextField, Typography } from "@material-ui/core";
 import { ComponentContext } from "./ComponentProvider";
 import { MainContext } from './MainContext';
+import baseUrl from './util/BaseUrl';
 
 const SetMainContentComponent = (setCurrentComponent) => {
   setCurrentComponent('main');
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
 const Login = (dispatch, setCurrentComponent) => {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  fetch('http://localhost:8080/users/signin', {
+  fetch(baseUrl + 'users/signin', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

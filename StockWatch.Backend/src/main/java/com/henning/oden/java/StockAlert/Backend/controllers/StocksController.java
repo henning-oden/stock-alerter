@@ -41,9 +41,12 @@ public class StocksController {
     private StockWatchService stockWatchService;
     private CustomUserDetailsService userDetailsService;
 
+    @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS})
     @GetMapping("/all")
-    public StockResponse getAllStocks() {
-        return new StockResponse(stockService.findAll());
+    public List<Stock> getAllStocks() {
+        // TODO: Also include the latest price for each stock here, OR:
+        // TODO: Remove latest price from the front end.
+        return stockService.findAll();
     }
 
     @PostMapping("/create-watch")
@@ -81,6 +84,7 @@ public class StocksController {
     @GetMapping("/get-watches")
     public List<StockWatchDto> getStockWatches(HttpServletRequest httpRequest) {
         SystemUser user = getUser(httpRequest);
+        // TODO: Add stock code to StockWatchDto.
         return stockWatchService.getStockWatchDtosByUser(user);
     }
 
