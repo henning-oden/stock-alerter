@@ -18,16 +18,15 @@ const formSubmit = () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
-  const body = {
-    username: username,
-    password: password,
-    email: email
-  };
-  console.log(body);
   if (confirmPassword !== password) {
     alert('The password confirmation did not match the original password');
   }
   else {
+    const body = {
+      username: username,
+      password: password,
+      email: email
+    };
     fetch(baseUrl + 'users/signup', {
       method: 'POST',
       headers: {
