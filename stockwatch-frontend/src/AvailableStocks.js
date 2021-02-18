@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { ComponentContext } from "./ComponentProvider";
 import baseUrl from "./util/BaseUrl";
+import { SelectedStockContext } from "./SelectedStockContext";
 
 
 const useStyles = makeStyles({
@@ -11,14 +12,17 @@ const useStyles = makeStyles({
   },
 });
 
-const SetStockWatchFormComponent = (setCurrentComponent) => {
-  setCurrentComponent('watchForm');
-}
 
 const AvailableStocks = () => {
   const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
+  const {code, setCode} = useContext(SelectedStockContext);
   const [stocks, setStocks] = useState([]);
   const classes = useStyles();
+  
+  const GoToStockWatchCreation = (code) => {
+    setCode(code);
+    setCurrentComponent('watchForm');
+  }
 
   useEffect(() => {  
     const fetchStocks = async () => {
@@ -46,7 +50,7 @@ const AvailableStocks = () => {
           <Grid item key={index}>
             <Typography variant="h4">{stock.code}</Typography>
             <Typography variant="h5">{stock.commonName}</Typography>
-            <Button className={classes.createWatch} color="primary" onClick={() => SetStockWatchFormComponent(setCurrentComponent)}>
+            <Button className={classes.createWatch} color="primary" onClick={() => GoToStockWatchCreation(stock.code)}>
               Create Watch
             </Button>
           </Grid>
