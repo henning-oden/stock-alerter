@@ -3,6 +3,7 @@ import { Button, Divider, Grid, makeStyles, Typography }  from "@material-ui/cor
 import { MainContext } from './MainContext';
 import { ComponentContext } from './ComponentProvider';
 import BaseUrl from './util/BaseUrl';
+import { StockWatchContext } from './StockWatchContext';
 
 const useStyles = makeStyles({
     stockCode: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles({
 })
 
 const YourStockWatches = () => {
+    const { stockState, dispatch: stockDispatch } = useContext(StockWatchContext)
     const { state, dispatch } = useContext(MainContext);
     const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
     const [ watches, setWatches ] = useState([]);
@@ -67,6 +69,14 @@ const YourStockWatches = () => {
         }
     }
 
+    const editWatch = (stockWatch) => {
+        stockDispatch({
+            editing: true,
+            code: stockWatch.stockCode,
+            id: stockWatch.id
+        });
+        setCurrentComponent('createWatch');
+    }
     return (
         <div>
             <Typography variant="h3">Your Stock Watches</Typography>
@@ -75,7 +85,7 @@ const YourStockWatches = () => {
                     return (<Grid item container direction="row">
                         <Grid item xs={4} sm={8}>
                             <Typography className={classes.stockCode}>
-                                {stockWatch.code}
+                                {stockWatch.stockCode}
                             </Typography>
                             <br />
                             <Typography className={classes.priceLimits}>
@@ -83,7 +93,7 @@ const YourStockWatches = () => {
                             </Typography>
                         </Grid>
                         <Grid item xs={4} sm={2}>
-                            <Button variant="contained" color="primary">Edit</Button>
+                            <Button variant="contained" color="primary" onClick={() => editWatch(stockWatch)}>Edit</Button>
                         </Grid>
                         <Grid item xs={4} sm={2}>
                             <Button variant="contained" color="secondary" onClick={() => deleteWatch(stockWatch.id)}>Delete</Button>

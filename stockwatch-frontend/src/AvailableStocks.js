@@ -15,12 +15,12 @@ const useStyles = makeStyles({
 
 const AvailableStocks = () => {
   const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
-  const {code, setCode} = useContext(StockWatchContext);
+  const {code, dispatch} = useContext(StockWatchContext);
   const [stocks, setStocks] = useState([]);
   const classes = useStyles();
   
   const GoToStockWatchCreation = (code) => {
-    setCode(code);
+    dispatch({editing: false, code: code, id: 0});
     setCurrentComponent('createWatch');
   }
 

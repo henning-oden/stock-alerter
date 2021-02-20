@@ -15,6 +15,8 @@ public class StockWatchDto {
     @Getter @Setter
     private long stockId;
     @Getter @Setter
+    private String stockCode;
+    @Getter @Setter
     private double minPrice;
     @Getter @Setter
     private double maxPrice;

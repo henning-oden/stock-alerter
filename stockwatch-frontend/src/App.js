@@ -28,7 +28,10 @@ const DetermineActiveComponent = (activeComponent) => {
       </StockWatchProvider>
         );
     case "watches":
-      return <YourStockWatches />;
+      return (
+        <StockWatchProvider>
+      <YourStockWatches />
+      </StockWatchProvider>);
     case "createWatch":
       return (
         <StockWatchProvider>

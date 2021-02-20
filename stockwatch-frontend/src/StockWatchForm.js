@@ -18,8 +18,8 @@ const useStyles = makeStyles({
 const StockWatchForm = (Callback, editing) => {
   const classes = useStyles();
   const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
-  const {code, setCode} = useContext(StockWatchContext);
-  const headingText = editing? 'Edit Stock Watch' : 'Create Stock Watch';
+  const {state, dispatch} = useContext(StockWatchContext);
+  const headingText = state.editing? 'Edit Stock Watch' : 'Create Stock Watch';
 
   return (
     <div>
@@ -27,10 +27,10 @@ const StockWatchForm = (Callback, editing) => {
             {headingText}
         </Typography>
         <Typography variant="body1" align="center">
-          Chosen stock: {code}
+          Chosen stock: {state.code}
         </Typography>
       <form className={classes.stockWatchForm}>
-        <input type="hidden" id="stockCode" value={code} />
+        <input type="hidden" id="stockCode" value={state.code} />
         <Grid container direction="column" alignContent="center">
           <Grid item>
             <TextField variant="outlined" id="maxPrice" label="Max Price" />

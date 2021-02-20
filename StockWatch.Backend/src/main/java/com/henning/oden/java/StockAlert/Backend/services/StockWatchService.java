@@ -5,6 +5,7 @@ import com.henning.oden.java.StockAlert.Backend.dto.StockWatchDto;
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
 import com.henning.oden.java.StockAlert.Backend.entities.StockWatch;
 import com.henning.oden.java.StockAlert.Backend.entities.SystemUser;
+import com.henning.oden.java.StockAlert.Backend.repos.StockRepository;
 import com.henning.oden.java.StockAlert.Backend.repos.StockWatchRepository;
 import org.hibernate.JDBCException;
 import org.modelmapper.ModelMapper;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class StockWatchService {
     private final StockWatchRepository stockWatches;
+    private final StockRepository stocks;
     private final ModelMapper modelMapper;
 
-    public StockWatchService (StockWatchRepository watches, ModelMapper modelMapper) {
+    public StockWatchService (StockWatchRepository watches, StockRepository stocks, ModelMapper modelMapper) {
         stockWatches = watches;
+        this.stocks = stocks;
         this.modelMapper = modelMapper;
     }
 
@@ -31,8 +34,8 @@ public class StockWatchService {
     }
 
     public List<StockWatch> findStockWatchesByStockId(long id) {
-        List<StockWatch> watchesOptional = stockWatches.findByStockId(id);
-        return watchesOptional;
+        List<StockWatch> watches = stockWatches.findByStockId(id);
+        return watches;
     }
 
     public List<StockWatch> findStockWatchesByUser(SystemUser user) {
@@ -40,8 +43,8 @@ public class StockWatchService {
     }
 
     public List<StockWatch> findStockWatchesByUserId(long id) {
-        List<StockWatch> watchesOptional = stockWatches.findByUserId(id);
-        return watchesOptional;
+        List<StockWatch> watches = stockWatches.findByUserId(id);
+        return watches;
     }
 
     public List<StockWatch> findAll() {
@@ -114,8 +117,11 @@ public class StockWatchService {
 
     public List<StockWatchDto> getStockWatchDtosByUser(SystemUser user) {
         List<StockWatch> stockWatches = findStockWatchesByUser(user);
-        return stockWatches.stream()
+        List<StockWatchDto> watchDtos = stockWatches.stream()
                 .map(stockWatch -> modelMapper.map(stockWatch, StockWatchDto.class))
                 .collect(Collectors.toList());
+        watchDtos.forEach(w -> {Stock stock = stocks.findById(w.getStockId()).get();
+        w.setStockCode(stock.getCode());});
+        return watchDtos;
     }
 }

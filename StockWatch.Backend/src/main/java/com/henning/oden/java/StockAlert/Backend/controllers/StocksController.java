@@ -88,6 +88,7 @@ public class StocksController {
         return stockWatchService.getStockWatchDtosByUser(user);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/get-watch")
     public StockWatchDto getStockWatch(HttpServletRequest httpRequest, @RequestParam long id) {
         StockWatch stockWatch = getStockWatch(id);

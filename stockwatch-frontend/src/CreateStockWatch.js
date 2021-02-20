@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Grid, makeStyles, TextField, Typography } from "@material-ui/core";
 import baseUrl from "./util/BaseUrl";
 import { ComponentContext } from "./ComponentProvider";
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 const CreateStockWatch = () => {
   const classes = useStyles();
   const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
-  const {code, setCode} = useContext(StockWatchContext);
+  const {state: stockState, dispatch: stockDispatch} = useContext(StockWatchContext);
   const {state, dispatch} = useContext(MainContext);
   
   const SubmitForm = () => {
@@ -31,7 +31,8 @@ const CreateStockWatch = () => {
       alert("The max price needs to be higher than the min price.");
     }
     else {
-      fetch(baseUrl + 'stocks/create-watch', {
+        let endpointUrl = stockState.editing? 'stocks/update-watch?id=' + stockState.id :  'stocks/create-watch'
+      fetch(baseUrl + endpointUrl, {
         method: "POST",
         headers: {
           'Authorization': 'Bearer ' + state.token,
@@ -48,12 +49,36 @@ const CreateStockWatch = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setCode('');
+        stockDispatch({
+            editing: false,
+            code: ''
+        });
         setCurrentComponent('watches');
       })
       .catch((err) => alert('Failed to create stock watch: ' + err));
     }
   }
+
+  useEffect(() => {
+      if(stockState.editing) {
+          fetch(baseUrl + 'get-watch?id=' + stockState.id, {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + state.token,
+                'Accept': 'application/json'
+            }
+          }).then((res) => res.json())
+          .then((data) => {
+            document.getElementById("stockCode").value = data.stockCode;
+            document.getElementById("maxPrice").value = data.maxPrice;
+            document.getElementById("minPrice").value = data.minPrice;
+            document.getElementById("alertThreshold").value = data.alertThreshold;
+          })
+          .catch((error) => {
+              alert('Error fetching stock watch: ' + error);
+          })
+      }
+  })
 
   return (
       StockWatchForm((() => SubmitForm()), false)
