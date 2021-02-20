@@ -15,49 +15,19 @@ const useStyles = makeStyles({
 });
 
 
-const StockWatchForm = () => {
+const StockWatchForm = (Callback, editing) => {
   const classes = useStyles();
-  const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
+  const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
   const {code, setCode} = useContext(SelectedStockContext);
-  const {state, dispatch} = useContext(MainContext);
-  
-  const SubmitForm = () => {
-    const stockCode = document.getElementById("stockCode").value;
-    const maxPrice = Number(document.getElementById("maxPrice").value);
-    const minPrice = Number(document.getElementById("minPrice").value);
-    const alertThreshold = Number(document.getElementById("alertThreshold").value);
-    if (minPrice > maxPrice) {
-      alert("The max price needs to be higher than the min price.");
-    }
-    else {
-      fetch(baseUrl + 'stocks/create-watch', {
-        method: "POST",
-        headers: {
-          'Authorization': 'Bearer ' + state.token,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            stockCode: stockCode,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            alertThreshold: alertThreshold
-        })
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setCode('');
-        setCurrentComponent('watches');
-      })
-      .catch((err) => alert('Failed to create stock watch: ' + err));
-    }
-  }
+  const headingText = editing? 'Edit Stock Watch' : 'Create Stock Watch';
 
   return (
     <div>
         <Typography variant="h3" align="center">
-            Create Stock Watch
+            {headingText}
+        </Typography>
+        <Typography variant="body1" align="center">
+          Chosen stock: {code}
         </Typography>
       <form className={classes.stockWatchForm}>
         <input type="hidden" id="stockCode" value={code} />
@@ -72,12 +42,13 @@ const StockWatchForm = () => {
             <TextField variant="outlined" id="alertThreshold" label="Alert Threshold" />
           </Grid>
           <Grid item>
-            <Button variant="contained" className={classes.createButton} onClick={() => SubmitForm()}>
+            <Button variant="contained" className={classes.createButton} onClick={() => Callback()}>
               Create Watch
             </Button>
           </Grid>
         </Grid>
       </form>
+      <Button align="center" onClick={() => setCurrentComponent('main')}>Home</Button>
     </div>
   );
 }

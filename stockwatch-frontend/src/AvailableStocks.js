@@ -21,7 +21,7 @@ const AvailableStocks = () => {
   
   const GoToStockWatchCreation = (code) => {
     setCode(code);
-    setCurrentComponent('watchForm');
+    setCurrentComponent('createWatch');
   }
 
   useEffect(() => {  
