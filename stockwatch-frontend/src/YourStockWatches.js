@@ -43,6 +43,30 @@ const YourStockWatches = () => {
     return setWatches([]);
     }, []);
 
+    const deleteWatch = (id) => {
+        const response = window.confirm("Are you sure you want to delete this watch?");
+        if (response) {
+            fetch(BaseUrl + 'stocks/delete-watch?id=' + id, {
+                method: "DELETE",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => res.json())
+            .then(data => {
+                if (data.result === 'Success') {
+                    const remainingWatches = watches.filter(w => w.id !== id);
+                    setWatches(remainingWatches);
+                }
+                else {
+                    alert('Could not delete watch: ' + data.message);
+                }
+            })
+            .catch(() => alert("Could not delete watch!"));
+        }
+    }
+
     return (
         <div>
             <Typography variant="h3">Your Stock Watches</Typography>
@@ -62,7 +86,7 @@ const YourStockWatches = () => {
                             <Button variant="contained" color="primary">Edit</Button>
                         </Grid>
                         <Grid item xs={4} sm={2}>
-                            <Button variant="contained" color="secondary">Delete</Button>
+                            <Button variant="contained" color="secondary" onClick={() => deleteWatch(stockWatch.id)}>Delete</Button>
                         </Grid>
                     </Grid>)
                 })}
