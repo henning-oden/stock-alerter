@@ -8,7 +8,7 @@ import AvailableStocks from "./AvailableStocks";
 import LoginForm from "./Login";
 import YourStockWatches from "./YourStockWatches";
 import { ComponentContext } from "./ComponentProvider";
-import { SelectedStockProvider } from "./SelectedStockContext";
+import { StockWatchProvider } from "./StockWatchContext";
 import CreateStockWatch from "./CreateStockWatch";
 
 const GetActiveComponent = (activeComponent) => {
@@ -23,17 +23,17 @@ const DetermineActiveComponent = (activeComponent) => {
       return <LoginForm />;
     case "availableStocks":
       return (
-      <SelectedStockProvider>
+      <StockWatchProvider>
         <AvailableStocks />
-      </SelectedStockProvider>
+      </StockWatchProvider>
         );
     case "watches":
       return <YourStockWatches />;
     case "createWatch":
       return (
-        <SelectedStockProvider>
+        <StockWatchProvider>
       <CreateStockWatch />
-      </SelectedStockProvider>
+      </StockWatchProvider>
       );
     case "register":
       return <RegisterForm />;

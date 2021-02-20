@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Grid, makeStyles, Typography } from "@material-ui/core";
 import { ComponentContext } from "./ComponentProvider";
 import baseUrl from "./util/BaseUrl";
-import { SelectedStockContext } from "./SelectedStockContext";
+import { StockWatchContext } from "./StockWatchContext";
 
 
 const useStyles = makeStyles({
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 
 const AvailableStocks = () => {
   const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
-  const {code, setCode} = useContext(SelectedStockContext);
+  const {code, setCode} = useContext(StockWatchContext);
   const [stocks, setStocks] = useState([]);
   const classes = useStyles();
   

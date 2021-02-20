@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Button, Grid, makeStyles, TextField, Typography } from "@material-ui/core";
 import baseUrl from "./util/BaseUrl";
 import { ComponentContext } from "./ComponentProvider";
-import { SelectedStockContext } from "./SelectedStockContext";
+import { StockWatchContext } from "./StockWatchContext";
 import { MainContext } from "./MainContext";
 import StockWatchForm from "./StockWatchForm";
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 const CreateStockWatch = () => {
   const classes = useStyles();
   const {currentComponent, setCurrentComponent} = useContext(ComponentContext);
-  const {code, setCode} = useContext(SelectedStockContext);
+  const {code, setCode} = useContext(StockWatchContext);
   const {state, dispatch} = useContext(MainContext);
   
   const SubmitForm = () => {
