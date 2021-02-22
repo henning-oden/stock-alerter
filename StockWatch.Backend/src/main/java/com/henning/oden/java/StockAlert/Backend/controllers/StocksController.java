@@ -2,7 +2,6 @@ package com.henning.oden.java.StockAlert.Backend.controllers;
 // Todo: Write unit tests for this class.
 
 import com.henning.oden.java.StockAlert.Backend.dto.DeletionResponse;
-import com.henning.oden.java.StockAlert.Backend.dto.StockResponse;
 import com.henning.oden.java.StockAlert.Backend.dto.StockWatchCreationRequest;
 import com.henning.oden.java.StockAlert.Backend.dto.StockWatchDto;
 import com.henning.oden.java.StockAlert.Backend.entities.Stock;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
@@ -30,7 +28,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS}, allowCredentials = "true")
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/stocks")
 @AllArgsConstructor
@@ -41,7 +39,6 @@ public class StocksController {
     private StockWatchService stockWatchService;
     private CustomUserDetailsService userDetailsService;
 
-    @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.OPTIONS})
     @GetMapping("/all")
     public List<Stock> getAllStocks() {
         // TODO: Also include the latest price for each stock here, OR:
@@ -49,6 +46,7 @@ public class StocksController {
         return stockService.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/create-watch")
     public StockWatchDto createStockWatch(HttpServletRequest httpRequest, @RequestBody StockWatchCreationRequest creationRequest) {
         long userId = getUserId(httpRequest);
@@ -72,6 +70,7 @@ public class StocksController {
         return stockWatchService.saveNewStockWatch(creationRequest, userId, stockOptional);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/update-watch") // Todo: Override default error handling to forward exception messages to the client.
     // Todo: Investigate validation of the request body to prevent undesired values in the StockWatch.
     // Current implementation allows for 0 value in prices if a price is misspelled or excluded in the request,
@@ -81,6 +80,7 @@ public class StocksController {
         return stockWatchService.updateStockWatchService(id, creationRequest);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/get-watches")
     public List<StockWatchDto> getStockWatches(HttpServletRequest httpRequest) {
         SystemUser user = getUser(httpRequest);
@@ -90,8 +90,8 @@ public class StocksController {
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @GetMapping("/get-watch")
-    public StockWatchDto getStockWatch(HttpServletRequest httpRequest, @RequestParam long id) {
-        StockWatch stockWatch = getStockWatch(id);
+    public StockWatchDto getWatchDto(HttpServletRequest httpRequest, @RequestParam long id) {
+        StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
         if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
             StockWatchDto stockWatchDto = modelMapper.map(stockWatch, StockWatchDto.class);
@@ -100,7 +100,7 @@ public class StocksController {
         throw stockWatchNotFound(id);
     }
 
-    private StockWatch getStockWatch(long id) {
+    private StockWatch getWatchDto(long id) {
         StockWatch stockWatch = stockWatchService.findById(id).orElseThrow(() -> stockWatchNotFound(id));
         return stockWatch;
     }
@@ -110,9 +110,10 @@ public class StocksController {
         return new HttpClientErrorException(HttpStatus.NOT_FOUND, "Stock watch with id " + id + " not found.");
     }
 
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @DeleteMapping("/delete-watch")
     public DeletionResponse deleteStockWatch (HttpServletRequest httpRequest, @RequestParam long id) {
-        StockWatch stockWatch = getStockWatch(id);
+        StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
         if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
             boolean result = stockWatchService.deleteStockWatch(stockWatch);

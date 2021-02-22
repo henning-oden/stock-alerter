@@ -61,7 +61,7 @@ const CreateStockWatch = () => {
 
   useEffect(() => {
       if(stockState.editing) {
-          fetch(baseUrl + 'get-watch?id=' + stockState.id, {
+          fetch(baseUrl + 'stocks/get-watch?id=' + stockState.id, {
             method: "GET",
             headers: {
                 'Authorization': 'Bearer ' + state.token,
@@ -81,7 +81,7 @@ const CreateStockWatch = () => {
   })
 
   return (
-      StockWatchForm((() => SubmitForm()), false)
+      StockWatchForm((() => SubmitForm()))
   );
 };
 

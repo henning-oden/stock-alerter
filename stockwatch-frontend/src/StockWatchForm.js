@@ -15,11 +15,12 @@ const useStyles = makeStyles({
 });
 
 
-const StockWatchForm = (Callback, editing) => {
+const StockWatchForm = (Callback) => {
   const classes = useStyles();
   const { currentComponent, setCurrentComponent } = useContext(ComponentContext);
   const {state, dispatch} = useContext(StockWatchContext);
   const headingText = state.editing? 'Edit Stock Watch' : 'Create Stock Watch';
+  const buttonText = state.editing? 'Edit Watch' : 'Create Watch';
 
   return (
     <div>
@@ -43,7 +44,7 @@ const StockWatchForm = (Callback, editing) => {
           </Grid>
           <Grid item>
             <Button variant="contained" className={classes.createButton} onClick={() => Callback()}>
-              Create Watch
+              {buttonText}
             </Button>
           </Grid>
         </Grid>
