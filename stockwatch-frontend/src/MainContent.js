@@ -20,9 +20,11 @@ const MainContent = () => {
                     What is this?
                 </Typography>
                 <Typography variant="body1">
-                    Stock Alerter is a program that allows users to search for stocks and create watches for specific stocks they want to keep track of. The maximum and minimum prices for the stock will be checked against the current price, and whenever the price has been outside of the interval formed by the prices for a number of price fetches equal to the Alert Threshold for the watch, a notification will be sent to the user. Currently, this can happen at most once per day per user and via e-mail only.
-                    <Link onClick={(event) => {event.preventDefault(); SetAvailableStocksComponent(setCurrentComponent)}}>Click here</Link> to list the currently available stocks. Find your stock 
-                    watches <Link onClick={(event) => {event.preventDefault(); SetStockWatchesComponent(setCurrentComponent)}}>here</Link>
+                    Stock Alerter is a program that allows users to search for stocks and create watches for specific stocks they want to keep track of. The maximum and minimum prices for the 
+                    stock will be checked against the current price, and whenever the price has been outside of the interval formed by the prices for a number of price fetches equal to the Alert 
+                    Threshold for the watch, a notification will be sent to the user. Currently, this can happen via e-mail 
+                    only. <Link onClick={(event) => {event.preventDefault(); SetAvailableStocksComponent(setCurrentComponent)}}>Click here</Link> to list the currently available stocks. Find your 
+                    stock watches <Link onClick={(event) => {event.preventDefault(); SetStockWatchesComponent(setCurrentComponent)}}>here</Link>.
                 </Typography>
                 <Typography variant="h3">
                     Why Stock Alerter?
