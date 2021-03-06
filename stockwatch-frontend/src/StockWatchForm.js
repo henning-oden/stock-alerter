@@ -34,13 +34,13 @@ const StockWatchForm = (Callback) => {
         <input type="hidden" id="stockCode" value={state.code} />
         <Grid container direction="column" alignContent="center">
           <Grid item>
-            <TextField variant="outlined" id="maxPrice" label="Max Price" />
+            <TextField variant="outlined" id="maxPrice" label="Max Price" InputLabelProps={{shrink: true}} type="number"/>
           </Grid>
           <Grid item>
-            <TextField variant="outlined" id="minPrice" label="Min Price" />
+            <TextField variant="outlined" id="minPrice" label="Min Price" InputLabelProps={{shrink: true}} type="number"/>
           </Grid>
           <Grid item>
-            <TextField variant="outlined" id="alertThreshold" label="Alert Threshold" />
+            <TextField variant="outlined" id="alertThreshold" label="Alert Threshold" InputLabelProps={{shrink: true}} type="number"/>
           </Grid>
           <Grid item>
             <Button variant="contained" className={classes.createButton} onClick={() => Callback()}>
