@@ -4,6 +4,8 @@ import { Button, Grid, Link, makeStyles, TextField, Typography } from "@material
 import { ComponentContext } from "./ComponentProvider";
 import { MainContext } from './MainContext';
 import baseUrl from './util/BaseUrl';
+import ErrorDisplay from './ErrorDisplay';
+import HandleError from './util/HandleError';
 
 const SetMainContentComponent = (setCurrentComponent) => {
   setCurrentComponent('main');
@@ -30,19 +32,33 @@ const Login = (dispatch, setCurrentComponent) => {
       password: password
     })
   }).then(
-    (res) => res.json()
-    )
+    (res) => {
+    if (!res.ok) {
+      throw Error(res.status);
+    }
+    return res.json();
+    })
+    .catch((err) => {
+      HandleError(err);
+      return;
+    })
     .then((data) => { 
       console.log(data);
+      if (data) {
       const jwtToken = data.token;
       const mainProps = {
         isLoggedIn: true,
         token: jwtToken
       };
       dispatch(mainProps);
+      return true;
+    }
+    return false;
     })
-    .then(() => {
+    .then((success) => {
+      if (success) {
       setCurrentComponent('main');
+      }
     });
 }
 
@@ -55,6 +71,7 @@ const LoginForm = () => {
             <Typography variant="h3">
                 Login
             </Typography>
+            <ErrorDisplay/>
     <form className={classes.form} >
         <Grid container direction="column" alignContent="center">
           <Grid item>

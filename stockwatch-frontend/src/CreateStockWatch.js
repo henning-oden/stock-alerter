@@ -5,6 +5,8 @@ import { ComponentContext } from "./ComponentProvider";
 import { StockWatchContext } from "./StockWatchContext";
 import { MainContext } from "./MainContext";
 import StockWatchForm from "./StockWatchForm";
+import HandleError from './util/HandleError';
+import ErrorDisplay from "./ErrorDisplay";
 
 const useStyles = makeStyles({
   createButton: {
@@ -28,7 +30,7 @@ const CreateStockWatch = () => {
     const minPrice = Number(document.getElementById("minPrice").value);
     const alertThreshold = Number(document.getElementById("alertThreshold").value);
     if (minPrice > maxPrice) {
-      alert("The max price needs to be higher than the min price.");
+      HandleError("The max price needs to be higher than the min price.");
     }
     else {
         let endpointUrl = stockState.editing? 'stocks/update-watch?id=' + stockState.id :  'stocks/create-watch'
@@ -81,7 +83,10 @@ const CreateStockWatch = () => {
   })
 
   return (
-      StockWatchForm((() => SubmitForm()))
+    <div>
+      <ErrorDisplay/>
+      {StockWatchForm((() => SubmitForm()))}
+    </div>
   );
 };
 

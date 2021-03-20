@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button, Grid, Typography } from "@material-ui/core";
 import baseUrl from "./util/BaseUrl";
+import ErrorDisplay from "./ErrorDisplay";
+import HandleError from "./util/HandleError";
 
 const useStyles = makeStyles({
   formContainer: {
@@ -19,7 +21,7 @@ const formSubmit = () => {
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
   if (confirmPassword !== password) {
-    alert('The password confirmation did not match the original password');
+    HandleError('The password confirmation did not match the original password');
   }
   else {
     const body = {
@@ -38,14 +40,14 @@ const formSubmit = () => {
     .then((res) => res.json())
     .then((data) => {
       if(data.result === 'Failure') {
-        alert('An error occurred while registering the user.');
+        HandleError('An error occurred while registering the user: ' + data.message);
       }
       else {
         alert(data.message);
       }
     })
     .catch(() => {
-      alert('An error occurred while registering the user.');
+      HandleError('An error occurred while registering the user.');
     }) 
   }
 }
@@ -55,6 +57,7 @@ const RegisterForm = () => {
   return (
     <div className="formContainer">
       <Typography variant="h3" align="center">Register user</Typography>
+      <ErrorDisplay/>
       <form className={classes.form} >
         <Grid container direction="column" alignContent="center">
           <Grid item>

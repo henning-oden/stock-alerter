@@ -3,7 +3,6 @@ import { Button, Grid, makeStyles, TextField, Typography } from "@material-ui/co
 import baseUrl from "./util/BaseUrl";
 import { ComponentContext } from "./ComponentProvider";
 import { StockWatchContext } from "./StockWatchContext";
-import { MainContext } from "./MainContext";
 
 const useStyles = makeStyles({
   createButton: {
