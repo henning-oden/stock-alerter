@@ -33,9 +33,9 @@ const CreateStockWatch = () => {
       HandleError("The max price needs to be higher than the min price.");
     }
     else {
-        let endpointUrl = stockState.editing? 'stocks/update-watch?id=' + stockState.id :  'stocks/create-watch'
+        let endpointUrl = stockState.editing? 'stocks/watch?id=' + stockState.id :  'stocks/watch'
       fetch(baseUrl + endpointUrl, {
-        method: "POST",
+        method: stockState.editing ? "PUT" : "POST",
         headers: {
           'Authorization': 'Bearer ' + state.token,
           'Accept': 'application/json',
@@ -63,7 +63,7 @@ const CreateStockWatch = () => {
 
   useEffect(() => {
       if(stockState.editing) {
-          fetch(baseUrl + 'stocks/get-watch?id=' + stockState.id, {
+          fetch(baseUrl + 'stocks/watch?id=' + stockState.id, {
             method: "GET",
             headers: {
                 'Authorization': 'Bearer ' + state.token,

@@ -26,7 +26,7 @@ const AvailableStocks = () => {
 
   useEffect(() => {  
     const fetchStocks = async () => {
-      fetch(baseUrl + 'stocks/all', {
+      fetch(baseUrl + 'stocks/stock', {
         method: 'GET',
         headers: {'Accept': 'application/json',
         'Content-Type': 'application/json'}

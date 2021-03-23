@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +40,7 @@ public class StocksController {
     private StockWatchService stockWatchService;
     private CustomUserDetailsService userDetailsService;
 
-    @GetMapping("/all")
+    @GetMapping("/stock")
     public List<Stock> getAllStocks() {
         // TODO: Also include the latest price for each stock here, OR:
         // TODO: Remove latest price from the front end.
@@ -47,7 +48,7 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/create-watch")
+    @PostMapping("/watch")
     public StockWatchDto createStockWatch(HttpServletRequest httpRequest, @RequestBody StockWatchCreationRequest creationRequest) {
         long userId = getUserId(httpRequest);
         return getStockWatchDto(creationRequest, userId);
@@ -71,7 +72,7 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/update-watch") // Todo: Override default error handling to forward exception messages to the client.
+    @PutMapping("/watch") // Todo: Override default error handling to forward exception messages to the client.
     // Todo: Investigate validation of the request body to prevent undesired values in the StockWatch.
     // Current implementation allows for 0 value in prices if a price is misspelled or excluded in the request,
     // as well as a maxPrice that is below minPrice.
@@ -81,7 +82,7 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping("/get-watches")
+    @GetMapping("/watches")
     public List<StockWatchDto> getStockWatches(HttpServletRequest httpRequest) {
         SystemUser user = getUser(httpRequest);
         // TODO: Add stock code to StockWatchDto.
@@ -89,7 +90,7 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping("/get-watch")
+    @GetMapping("/watch")
     public StockWatchDto getWatchDto(HttpServletRequest httpRequest, @RequestParam long id) {
         StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
@@ -111,7 +112,7 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @DeleteMapping("/delete-watch")
+    @DeleteMapping("/watch")
     public DeletionResponse deleteStockWatch (HttpServletRequest httpRequest, @RequestParam long id) {
         StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
