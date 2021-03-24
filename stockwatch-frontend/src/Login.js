@@ -39,7 +39,12 @@ const Login = (dispatch, setCurrentComponent) => {
     return res.json();
     })
     .catch((err) => {
+      
+    if (err.message === '403') {
+      HandleError('Invalid username or password.');
+  } else {
       HandleError(err);
+  }
       return;
     })
     .then((data) => { 

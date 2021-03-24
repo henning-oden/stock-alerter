@@ -57,7 +57,7 @@ const CreateStockWatch = () => {
         });
         setCurrentComponent('watches');
       })
-      .catch((err) => alert('Failed to create stock watch: ' + err));
+      .catch((err) => HandleError('Failed to create stock watch: ' + err));
     }
   }
 
@@ -77,7 +77,7 @@ const CreateStockWatch = () => {
             document.getElementById("alertThreshold").value = data.alertThreshold;
           })
           .catch((error) => {
-              alert('Error fetching stock watch: ' + error);
+              HandleError('Error fetching stock watch: ' + error);
           })
       }
   })
