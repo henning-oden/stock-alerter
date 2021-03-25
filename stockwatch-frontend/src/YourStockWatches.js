@@ -27,7 +27,7 @@ const YourStockWatches = () => {
 
     useEffect(() => {
         const fetchWatches = async () => {
-        fetch(BaseUrl + 'stocks/watches', {
+        fetch(BaseUrl + 'stocks/watch', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -48,7 +48,7 @@ const YourStockWatches = () => {
     const deleteWatch = (id) => {
         const response = window.confirm("Are you sure you want to delete this watch?");
         if (response) {
-            fetch(BaseUrl + 'stocks/watch?id=' + id, {
+            fetch(BaseUrl + 'stocks/watch/' + id, {
                 method: "DELETE",
                 headers: {
                     'Authorization': 'Bearer ' + token,

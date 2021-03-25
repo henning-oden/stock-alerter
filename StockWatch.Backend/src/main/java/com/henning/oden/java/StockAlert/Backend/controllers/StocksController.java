@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,6 @@ public class StocksController {
 
     @GetMapping("/stock")
     public List<Stock> getAllStocks() {
-        // TODO: Also include the latest price for each stock here, OR:
-        // TODO: Remove latest price from the front end.
         return stockService.findAll();
     }
 
@@ -72,17 +71,17 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PutMapping("/watch") // Todo: Override default error handling to forward exception messages to the client.
+    @PutMapping("/watch/{id}") // Todo: Override default error handling to forward exception messages to the client.
     // Todo: Investigate validation of the request body to prevent undesired values in the StockWatch.
     // Current implementation allows for 0 value in prices if a price is misspelled or excluded in the request,
     // as well as a maxPrice that is below minPrice.
-    public StockWatchDto updateStockWatch(HttpServletRequest httpRequest, @RequestParam long id,
+    public StockWatchDto updateStockWatch(HttpServletRequest httpRequest, @PathVariable long id,
                                           @RequestBody StockWatchCreationRequest creationRequest) {
         return stockWatchService.updateStockWatchService(id, creationRequest);
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping("/watches")
+    @GetMapping("/watch")
     public List<StockWatchDto> getStockWatches(HttpServletRequest httpRequest) {
         SystemUser user = getUser(httpRequest);
         // TODO: Add stock code to StockWatchDto.
@@ -90,8 +89,8 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping("/watch")
-    public StockWatchDto getWatchDto(HttpServletRequest httpRequest, @RequestParam long id) {
+    @GetMapping("/watch/{id}")
+    public StockWatchDto getWatchDto(HttpServletRequest httpRequest, @PathVariable long id) {
         StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
         if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
@@ -112,8 +111,8 @@ public class StocksController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @DeleteMapping("/watch")
-    public DeletionResponse deleteStockWatch (HttpServletRequest httpRequest, @RequestParam long id) {
+    @DeleteMapping("/watch/{id}")
+    public DeletionResponse deleteStockWatch (HttpServletRequest httpRequest, @PathVariable long id) {
         StockWatch stockWatch = getWatchDto(id);
         long userId = getUserId(httpRequest);
         if (stockWatchService.userOwnsWatch(userId, stockWatch)) {
