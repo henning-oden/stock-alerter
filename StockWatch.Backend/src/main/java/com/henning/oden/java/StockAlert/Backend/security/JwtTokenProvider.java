@@ -95,6 +95,7 @@ public class JwtTokenProvider {
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             // Todo: forward exception message to client as status code 401 Unauthorized.
+            // Tried ResponseStatusException without change in result
             throw new JwtException("Expired or invalid JWT token");
         }
     }
