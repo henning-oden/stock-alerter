@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="henning">
+        <createTable tableName="users">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(250)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(250)">
+                    <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="system_user_roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="system_user_id" type="int">
+                <constraints nullable="false" /> 
+            </column>
+            <column name="roles" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="system_user_roles" baseColumnNames="system_user_id"
+                                 constraintName="fk_user_role"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+        <addForeignKeyConstraint baseTableName="system_user_roles" baseColumnNames="roles"
+                                 constraintName="fk_role_user"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
+    <changeSet id="data1" author="henning">
+        <insert tableName="roles" >
+            <column name="id" valueNumeric="1"></column>
+            <column name="name" value="USER"></column>
+        </insert>
+    </changeSet>
+    <changeSet id="2" author="henning">
+        <createTable tableName="stocks">
+            <column autoIncrement="true" type="bigint" name="id">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="code" type="varchar(5)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="common_name" type="varchar(126)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="data2" author="henning">
+        <insert tableName="stocks" >
+            <column name="id" valueNumeric="1"></column>
+            <column name="code" value="AAPL"></column>
+            <column name="common_name" value="Apple"></column>
+        </insert>
+        <insert tableName="stocks" >
+            <column name="id" valueNumeric="2"></column>
+            <column name="code" value="GOOGL"></column>
+            <column name="common_name" value="Alphabet Inc Class A"></column>
+        </insert>
+        <insert tableName="stocks" >
+            <column name="id" valueNumeric="3"></column>
+            <column name="code" value="MSFT"></column>
+            <column name="common_name" value="Microsoft"></column>
+        </insert>
+    </changeSet>
+    <changeSet id="3" author="henning">
+        <createTable tableName="stock_watches">
+            <column autoIncrement="true" type="int" name="id">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="stock_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="max_price" type="decimal(9,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="min_price" type="decimal(9,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="times_exceeded" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="alert_threshold" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="stock_watches" baseColumnNames="user_id"
+                                 constraintName="fk_user_stock_watch"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+        <addForeignKeyConstraint baseTableName="stock_watches" baseColumnNames="stock_id"
+                                 constraintName="fk_stock_stock_watch"
+                                 referencedTableName="stocks"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
+    <changeSet id="4" author="henning">
+        <createTable tableName="price_data">
+            <column autoIncrement="true" name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="stock_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="price" type="decimal(9,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="price_data" baseColumnNames="stock_id" constraintName="fk_stock_price_data"
+                                 referencedTableName="stocks"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+    </changeSet>
+    <changeSet id="5" author="henning">
+        <addColumn tableName="users">
+            <column name="email_address" type="varchar(256)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email_verified" type="boolean" defaultValueBoolean="false" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="6" author="henning">
+        <createTable tableName="email_confirmation_tokens">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_used" type="boolean" defaultValueBoolean="false" />
+        </createTable>
+        <addForeignKeyConstraint baseTableName="email_confirmation_tokens" baseColumnNames="user_id"
+                                 constraintName="fk_user_email_confirmation_token"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 onUpdate="CASCADE" onDelete="CASCADE" />
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="email_confirmation_tokens" 
+                                      constraintName="fk_user_email_confirmation_token" />
+            <dropTable tableName="email_confirmation_tokens" />
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
